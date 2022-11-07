@@ -12,6 +12,8 @@ We'll be making a McDonald's assembly line with custom graphics. Basically, imag
 Technical Overview:
 The user interface will be a 2D top down view of a McDonald's kitchen. It will contain a basic map of the inside of the kitchen, and will have workers at each station ready to prepare orders. This will be sort of like a game, where the user will input an order, and will see the order being constructed, and the progress of each individual thread as it executes. The user input will be done via sets of menus, where the user can choose what they want to order, and add it to a list. After they have added what they want, they will place the order, and then see all the individual parts moving. Ideally, we'll have timers or progress bars on top of each station to indicate the progress, but depending on the technical limitations of the graphical crates we'll be using, that is up for question. Once completed, the user will be "presented" with the order, and the kitchen shall remain idle, unless another order was placed before the first completed. 
 
+We are going to be using the MacroQuad crate for our graphics, found here: https://github.com/not-fl3/macroquad
+
 Checkpoint 1:
 A basic graphics should be implimented by this point, with the kitchen laid out and workers in place. The menu ordering should also be implimented, although without the thread processing yet. 
 

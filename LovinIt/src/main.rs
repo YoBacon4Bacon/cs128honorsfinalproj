@@ -78,62 +78,63 @@ async fn main() {
 
 loop {
         
-        clear_background(WHITE);
+    clear_background(WHITE);
 
-        draw_rectangle_lines(10.0, 10.0, 775.0, 730.0, 20.0, BLACK);
+    draw_rectangle_lines(10.0, 10.0, 1085.0, 880.0, 20.0, BLACK);
 
-        let floor_tile = Color::from_rgba(226, 222, 221, 100);
+    let floor_tile = Color::from_rgba(226, 222, 221, 100);
 
-        for n in (33..770).step_by(17) {
-            let a = n as f32;
-            draw_line(a, 20.0, a, 730.0, 3.0, floor_tile);
-        }
-        
-        for n in (33..730).step_by(17) {
-            let a = n as f32;
-            draw_line(20.0, a, 775.0, a, 3.0, floor_tile);
-        }
-        /*
-        //burger
-        let burger_floor = Color::from_rgba(138, 43, 226, 30);
-        let grill = Color::from_rgba(220, 220, 220, 255);
-        let grill2 = Color::from_rgba(169, 169, 169, 70);
-        draw_rectangle(20.0, 20.0, 300.0, 170.0, WHITE);
-        draw_rectangle(20.0, 20.0, 300.0, 170.0, burger_floor);
-        draw_rectangle(20.0, 20.0, 70.0, 200.0, grill);
-        draw_rectangle(85.0, 20.0, 5.0, 200.0, grill2);
-        draw_text("Burgers", 255.0, 35.0, 20.0, BLACK);
-        */
-        //fries
-        let fries_floor = Color::from_rgba(175, 238, 238, 30);
-        draw_rectangle(20.0, 190.0, 300.0, 248.0, WHITE);
-        draw_rectangle(20.0, 190.0, 300.0, 248.0, fries_floor);
-        //draw_text("Fries", 40.0, 230.0, 50.0, BLACK);
-        
-        //drinks
-        let drink_floor = Color::from_rgba(255, 127, 80, 30);
-        draw_rectangle(20.0, 482.0, 480.0, 248.0, WHITE);
-        draw_rectangle(20.0, 482.0, 480.0, 248.0, drink_floor);
-        //draw_text("Drinks", 40.0, 550.0, 50.0, BLACK);
-        
-        //cashier
-        let cashier_floor = Color::from_rgba(255, 250, 205, 50);
-        draw_rectangle(500.0, 482.0, 275.0, 248.0, WHITE);
-        draw_rectangle(500.0, 482.0, 275.0, 248.0, cashier_floor);
-        //draw_text("Cashier", 620.0, 410.0, 50.0, BLACK);
-        /*
-        //assembly 
-        let assembly_floor = Color::from_rgba(152, 251, 152, 30);
-        draw_rectangle(475.0, 20.0, 300.0, 250.0, WHITE);
-        draw_rectangle(475.0, 20.0, 300.0, 250.0, assembly_floor);
-        draw_text("Assembly", 575.0, 50.0, 50.0, BLACK);
+    for n in (33..1080).step_by(17) {
+        let a = n as f32;
+        draw_line(a, 20.0, a, 880.0, 3.0, floor_tile);
+    }
+    
+    for n in (33..870).step_by(17) {
+        let a = n as f32;
+        draw_line(20.0, a, 1085.0, a, 3.0, floor_tile);
+    }
+    
+    /*
+    //burger
+    let burger_floor = Color::from_rgba(138, 43, 226, 30);
+    let grill = Color::from_rgba(220, 220, 220, 255);
+    let grill2 = Color::from_rgba(169, 169, 169, 70);
+    draw_rectangle(20.0, 20.0, 300.0, 170.0, WHITE);
+    draw_rectangle(20.0, 20.0, 300.0, 170.0, burger_floor);
+    draw_rectangle(20.0, 20.0, 70.0, 200.0, grill);
+    draw_rectangle(85.0, 20.0, 5.0, 200.0, grill2);
+    draw_text("Burgers", 255.0, 35.0, 20.0, BLACK);
+    
+    //fries
+    let fries_floor = Color::from_rgba(175, 238, 238, 30);
+    draw_rectangle(20.0, 210.0, 300.0, 248.0, WHITE);
+    draw_rectangle(20.0, 210.0, 300.0, 248.0, fries_floor);
+    //draw_text("Fries", 40.0, 230.0, 50.0, BLACK);
+    */
+    //drinks
+    let drink_floor = Color::from_rgba(255, 127, 80, 30);
+    draw_rectangle(20.0, 632.0, 480.0, 248.0, WHITE);
+    draw_rectangle(20.0, 632.0, 480.0, 248.0, drink_floor);
+    //draw_text("Drinks", 40.0, 550.0, 50.0, BLACK);
+    /*
+    //cashier
+    let cashier_floor = Color::from_rgba(255, 250, 205, 50);
+    draw_rectangle(500.0, 482.0, 275.0, 248.0, WHITE);
+    draw_rectangle(500.0, 482.0, 275.0, 248.0, cashier_floor);
+    //draw_text("Cashier", 620.0, 410.0, 50.0, BLACK);
+    
+    //assembly 
+    let assembly_floor = Color::from_rgba(152, 251, 152, 30);
+    draw_rectangle(475.0, 20.0, 300.0, 250.0, WHITE);
+    draw_rectangle(475.0, 20.0, 300.0, 250.0, assembly_floor);
+    draw_text("Assembly", 575.0, 50.0, 50.0, BLACK);
 
-        //partitions/walls
-        draw_line(20.0, 190.0, 320.0, 190.0, 10.0, BLACK);
-        draw_line(20.0, 375.0, 320.0, 375.0, 10.0, BLACK);
-        draw_line(475.0, 270.0, 775.0, 270.0, 10.0, BLACK);
-        draw_line(500.0, 375.0, 500.0, 575.0, 10.0, BLACK);
-        */
+    //partitions/walls
+    draw_line(20.0, 190.0, 320.0, 190.0, 10.0, BLACK);
+    draw_line(20.0, 375.0, 320.0, 375.0, 10.0, BLACK);
+    draw_line(475.0, 270.0, 775.0, 270.0, 10.0, BLACK);
+    draw_line(500.0, 375.0, 500.0, 575.0, 10.0, BLACK);
+    */
 
     //drawing the image
     //texture methods for image manipulation

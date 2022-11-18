@@ -69,11 +69,15 @@ fn window_conf() -> Conf {
 #[macroquad::main(window_conf)]
 async fn main() {
     //adding image into program
-    let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
-    let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
-    let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
-    let worker4: Texture2D = load_texture("images/worker4.png").await.unwrap();
-    let worker5: Texture2D = load_texture("images/worker5.png").await.unwrap();
+    /*
+    if {
+        let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
+        let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
+        let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
+        let worker4: Texture2D = load_texture("images/worker4.png").await.unwrap();
+        let worker5: Texture2D = load_texture("images/worker5.png").await.unwrap();
+    }
+    */
     let mut Order = Order::new();
 
 loop {
@@ -93,51 +97,52 @@ loop {
         let a = n as f32;
         draw_line(20.0, a, 1085.0, a, 3.0, floor_tile);
     }
+
+    //far right, x = 1085
     
-    /*
     //burger
     let burger_floor = Color::from_rgba(138, 43, 226, 30);
-    let grill = Color::from_rgba(220, 220, 220, 255);
-    let grill2 = Color::from_rgba(169, 169, 169, 70);
-    draw_rectangle(20.0, 20.0, 300.0, 170.0, WHITE);
-    draw_rectangle(20.0, 20.0, 300.0, 170.0, burger_floor);
-    draw_rectangle(20.0, 20.0, 70.0, 200.0, grill);
-    draw_rectangle(85.0, 20.0, 5.0, 200.0, grill2);
-    draw_text("Burgers", 255.0, 35.0, 20.0, BLACK);
+    //let grill = Color::from_rgba(220, 220, 220, 255);
+    //let grill2 = Color::from_rgba(169, 169, 169, 70);
+    draw_rectangle(20.0, 20.0, 400.0, 300.0, WHITE);
+    draw_rectangle(20.0, 20.0, 400.0, 300.0, burger_floor);
+    //draw_rectangle(20.0, 20.0, 70.0, 200.0, grill);
+    //draw_rectangle(85.0, 20.0, 5.0, 200.0, grill2);
+    //draw_text("Burgers", 255.0, 35.0, 20.0, BLACK);
     
     //fries
     let fries_floor = Color::from_rgba(175, 238, 238, 30);
-    draw_rectangle(20.0, 210.0, 300.0, 248.0, WHITE);
-    draw_rectangle(20.0, 210.0, 300.0, 248.0, fries_floor);
+    draw_rectangle(20.0, 300.0, 400.0, 300.0, WHITE);
+    draw_rectangle(20.0, 300.0, 400.0, 300.0, fries_floor);
     //draw_text("Fries", 40.0, 230.0, 50.0, BLACK);
-    */
+
     //drinks
     let drink_floor = Color::from_rgba(255, 127, 80, 30);
-    draw_rectangle(20.0, 632.0, 480.0, 248.0, WHITE);
-    draw_rectangle(20.0, 632.0, 480.0, 248.0, drink_floor);
+    draw_rectangle(20.0, 580.0, 580.0, 300.0, WHITE);
+    draw_rectangle(20.0, 580.0, 580.0, 300.0, drink_floor);
     //draw_text("Drinks", 40.0, 550.0, 50.0, BLACK);
-    /*
+    
     //cashier
     let cashier_floor = Color::from_rgba(255, 250, 205, 50);
-    draw_rectangle(500.0, 482.0, 275.0, 248.0, WHITE);
-    draw_rectangle(500.0, 482.0, 275.0, 248.0, cashier_floor);
+    draw_rectangle(600.0, 630.0, 485.0, 248.0, WHITE);
+    draw_rectangle(600.0, 630.0, 485.0, 248.0, cashier_floor);
     //draw_text("Cashier", 620.0, 410.0, 50.0, BLACK);
     
     //assembly 
     let assembly_floor = Color::from_rgba(152, 251, 152, 30);
-    draw_rectangle(475.0, 20.0, 300.0, 250.0, WHITE);
-    draw_rectangle(475.0, 20.0, 300.0, 250.0, assembly_floor);
-    draw_text("Assembly", 575.0, 50.0, 50.0, BLACK);
-
+    draw_rectangle(610.0, 20.0, 475.0, 510.0, WHITE);
+    draw_rectangle(610.0, 20.0, 475.0, 510.0, assembly_floor);
+    //draw_text("Assembly", 575.0, 50.0, 50.0, BLACK);
+    
     //partitions/walls
-    draw_line(20.0, 190.0, 320.0, 190.0, 10.0, BLACK);
-    draw_line(20.0, 375.0, 320.0, 375.0, 10.0, BLACK);
-    draw_line(475.0, 270.0, 775.0, 270.0, 10.0, BLACK);
-    draw_line(500.0, 375.0, 500.0, 575.0, 10.0, BLACK);
-    */
+    draw_line(20.0, 300.0, 420.0, 300.0, 10.0, BLACK);
+    draw_line(20.0, 580.0, 420.0, 580.0, 10.0, BLACK);
+    draw_line(610.0, 400.0, 1085.0, 400.0, 10.0, BLACK);
+    draw_line(600.0, 575.0, 600.0, 880.0, 10.0, BLACK);
 
     //drawing the image
     //texture methods for image manipulation
+    /*
     //https://github.com/not-fl3/macroquad/blob/master/src/texture.rs
         draw_texture_ex(
             worker1,
@@ -190,6 +195,7 @@ loop {
             },
         );
 
+    */    
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {

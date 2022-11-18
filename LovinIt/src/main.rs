@@ -69,15 +69,13 @@ fn window_conf() -> Conf {
 #[macroquad::main(window_conf)]
 async fn main() {
     //adding image into program
-    /*
-    if {
-        let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
-        let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
-        let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
-        let worker4: Texture2D = load_texture("images/worker4.png").await.unwrap();
-        let worker5: Texture2D = load_texture("images/worker5.png").await.unwrap();
-    }
-    */
+    
+    let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
+    let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
+    let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
+    let worker4: Texture2D = load_texture("images/worker4.png").await.unwrap();
+    let worker5: Texture2D = load_texture("images/worker5.png").await.unwrap();
+    
     let mut Order = Order::new();
 
 loop {
@@ -142,7 +140,7 @@ loop {
 
     //drawing the image
     //texture methods for image manipulation
-    /*
+    
     //https://github.com/not-fl3/macroquad/blob/master/src/texture.rs
         draw_texture_ex(
             worker1,
@@ -195,7 +193,7 @@ loop {
             },
         );
 
-    */    
+       
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {

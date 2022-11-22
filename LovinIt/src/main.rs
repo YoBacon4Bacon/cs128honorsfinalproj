@@ -26,6 +26,37 @@ pub struct Item {
     name: ItemType,
     customizations: Vec<String>,
 }
+pub struct Hamburger {
+    ingredients: Vec<String>,
+}
+impl Default for Hamburger {
+    fn default() -> Hamburger {
+        Hamburger {
+            ingredients: vec!["reg bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+        }
+    }
+}
+pub struct Cheeseburger {
+    ingredients: Vec<String>,
+}
+impl Default for Cheeseburger {
+    fn default() -> Cheeseburger {
+        Cheeseburger {
+            ingredients: vec!["reg bun".to_string(), "beef patty".to_string(), "amer cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+        }
+    }
+}
+pub struct McDouble {
+    ingredients: Vec<String>,
+}
+impl Default for McDouble {
+    fn default() -> McDouble {
+        McDouble {
+            ingredients: vec!["reg bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "amer cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+        }
+    }
+}
+
 impl Item {
     pub fn new(item_type:&str) -> Item{
         Item{

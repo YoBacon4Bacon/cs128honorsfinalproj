@@ -453,70 +453,202 @@ loop {
             ui.label(None, "Click to add to cart.");
             ui.tree_node(hash!(), "Burgers", |ui| {
                 if ui.button(None, "Hamburger") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Hamburger") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Hamburger"));
+                    }
                     println!("Hamburger added");
-                    Order.inventory.push(Item::new("Hamburger"));
                 }
                 ui.separator();
                 if ui.button(None, "Cheeseburger") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Cheeseburger") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Cheeseburger"));
+                    }
                     println!("Cheeseburger added");
-                    Order.inventory.push(Item::new("Cheeseburger"));
                 }
                 ui.separator();
                 if ui.button(None, "Double Hamburger") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Double Hamburger") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Double Hamburger"));
+                    }
                     println!("Double Hamburger added");
-                    Order.inventory.push(Item::new("Double Hamburger"));
+                    
                 }
                 ui.separator();
                 if ui.button(None, "Double Cheeseburger") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Double Cheeseburger") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Double Cheeseburger"));
+                    }
                     println!("Double Cheeseburger added");
-                    Order.inventory.push(Item::new("Double Cheeseburger"));
                 }
                 ui.separator();
                 if ui.button(None, "McDouble") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "McDouble") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("McDouble"));
+                    }
                     println!("McDouble added");
-                    Order.inventory.push(Item::new("McDouble"));
                 }
                 ui.separator();
                 if ui.button(None, "Big Mac") {
+                   let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Big Mac") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Big Mac"));
+                    }
                     println!("Big Mac added");
-                    Order.inventory.push(Item::new("Big Mac"));
                 }
                 ui.separator();
                 if ui.button(None, "Quarter Pounder") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Quarter Pounder") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Quarter Pounder"));
+                    }
                     println!("Quarter Pounder added");
-                    Order.inventory.push(Item::new("Quarter Pounder"));
                 }
                 ui.separator();
                 if ui.button(None, "Quarter Pounder with Cheese") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Quarter Pounder with Cheese") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Quarter Pounder with Cheese"));
+                    }
                     println!("Quarter Pounder with Cheese added");
-                    Order.inventory.push(Item::new("Quarter Pounder with Cheese"));
+                    
                 }
                 ui.separator();
                 if ui.button(None, "Double Quarter Pounder") {
+                   let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Double Quarter Pounder") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Double Quarter Pounder"));
+                    }
                     println!("Double Quarter Pounder added");
-                    Order.inventory.push(Item::new("Double Quarter Pounder"));
                 }
                 ui.separator();
                 if ui.button(None, "Double Quarter Pounder with Cheese") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Double Quarter Pounder with Cheese") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Double Quarter Pounder with Cheese"));
+                    }
                     println!("Double Quarter Pounder with Cheese added");
-                    Order.inventory.push(Item::new("Double Quarter Pounder with Cheese"));
                 }
                 ui.separator();
             });
             ui.tree_node(hash!(), "Fries", |ui| {
                 if ui.button(None, "Small Fry") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Small Fry") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Small Fry"));
+                    }
                     println!("Small Fry added");
-                    Order.inventory.push(Item::new("Small Fry"));
                 }
                 ui.separator();
                 if ui.button(None, "Medium Fry") {
+                   let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Medium Fry") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Medium Fry"));
+                    }
                     println!("Medium Fry added");
-                    Order.inventory.push(Item::new("Medium Fry"));
                 }
                 ui.separator();
                 if ui.button(None, "Large Fry") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..Order.inventory.len() {
+                        if (Order.inventory[i].str_name == "Large Fry") {
+                            Order.inventory[i].number += 1.0;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        Order.inventory.push(Item::new("Large Fry"));
+                    }
                     println!("Large Fry added");
-                    Order.inventory.push(Item::new("Large Fry"));
                 }
                 ui.separator();
             });
@@ -525,7 +657,7 @@ loop {
                 println!("");
                 println!("Here are the details of your order: ");
                 for x in &Order.inventory {
-                    println!("{0}", x.str_name);
+                    println!("{:?}: ({:?})", x.str_name, x.number);
                 }
             }
         });

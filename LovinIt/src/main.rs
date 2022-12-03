@@ -22,10 +22,14 @@ pub enum ItemType{
     Large_Fry,
     Null,
 }
+
 pub struct Item {
     name: ItemType,
     customizations: Vec<String>,
+    str_name: String,
+    number: f32,
 }
+
 pub struct Hamburger {
     ingredients: Vec<String>,
 }
@@ -74,6 +78,8 @@ impl Item {
                 _=> ItemType::Null
             },
             customizations:vec![],
+            str_name:item_type.to_string(),
+            number:1 as f32,
         }
     }
 }
@@ -516,6 +522,11 @@ loop {
             });
             if ui.button(None, "Place Order") {
                 println!("Order Placed!");
+                println!("");
+                println!("Here are the details of your order: ");
+                for x in &Order.inventory {
+                    println!("{0}", x.str_name);
+                }
             }
         });
 

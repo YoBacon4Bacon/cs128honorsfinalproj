@@ -169,8 +169,7 @@ fn ham_bun(x : f32, y : f32) {
     }
 }
 
-async fn leaf(x : f32, y : f32) {
-    let lettuce: Texture2D = load_texture("images/lettuce.png").await.unwrap();
+async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
     let letSize = Vec2 {x: 50.0, y: 40.0};
 
     draw_texture_ex(
@@ -185,8 +184,7 @@ async fn leaf(x : f32, y : f32) {
     );
 }
 
-async fn tomato(x : f32, y : f32) {
-    let tomato: Texture2D = load_texture("images/tomato.png").await.unwrap();
+async fn tomato(x : f32, y : f32,tomato:Texture2D) {
     let tomatoSize = Vec2 {x: 50.0, y: 50.0};
 
     draw_texture_ex(
@@ -201,8 +199,7 @@ async fn tomato(x : f32, y : f32) {
     );
 }
 
-async fn tom(x : f32, y : f32) {
-    let tom: Texture2D = load_texture("images/tom.png").await.unwrap();
+async fn tom(x : f32, y : f32,tom:Texture2D) {
     let tomSize = Vec2 {x: 40.0, y: 40.0};
 
     draw_texture_ex(
@@ -217,8 +214,7 @@ async fn tom(x : f32, y : f32) {
     );
 }
 
-async fn fries(x : f32, y : f32) {
-    let fries: Texture2D = load_texture("images/fries.png").await.unwrap();
+async fn fries(x : f32, y : f32,fries:Texture2D) {
     let frySize = Vec2 {x: 50.0, y: 50.0};
 
     draw_texture_ex(
@@ -233,8 +229,7 @@ async fn fries(x : f32, y : f32) {
     );
 }
 
-async fn cashier(x : f32, y : f32) {
-    let cashier: Texture2D = load_texture("images/register.png").await.unwrap();
+async fn cashier(x : f32, y : f32,cashier:Texture2D) {
     let cashSize = Vec2 {x: 90.0, y: 90.0};
 
     draw_texture_ex(
@@ -274,17 +269,26 @@ fn boxes() {
 async fn main() {
     //adding image into program
     
-    let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
-    let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
-    let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
-    let worker4: Texture2D = load_texture("images/worker4.png").await.unwrap();
-    let worker5: Texture2D = load_texture("images/worker5.png").await.unwrap();
+    let lettuce: Texture2D = load_texture("images/lettuce.png").await.unwrap();
+    let tomato: Texture2D = load_texture("images/tomato.png").await.unwrap();
+    let tom: Texture2D = load_texture("images/tom.png").await.unwrap();
+    let fries: Texture2D = load_texture("images/fries.png").await.unwrap();
+    let cashier: Texture2D = load_texture("images/register.png").await.unwrap();
+    
 
-    // let worker1: Texture2D = load_texture("images/nowak.png").await.unwrap();
-    // let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
-    // let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
-    // let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
-    // let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
+    // let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
+    // let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
+    // let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
+    // let worker4: Texture2D = load_texture("images/worker4.png").await.unwrap();
+    // let worker5: Texture2D = load_texture("images/worker5.png").await.unwrap();
+
+
+    
+    let worker1: Texture2D = load_texture("images/nowak.png").await.unwrap();
+    let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
+    let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
+    let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
+    let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
 
     
     let mut order = Order::new();

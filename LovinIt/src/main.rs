@@ -1,11 +1,17 @@
 use macroquad::prelude::*;
 use macroquad::color::Color;
+use std::thread;
+use std::thread::JoinHandle;
+use std::time;
+
 
 use macroquad::ui::{
     hash, root_ui,
     widgets::{self, Group},
     Drag, Ui,
 };
+
+#[derive(Clone)]
 pub enum ItemType{
     Hamburger,
     Cheeseburger,
@@ -22,7 +28,7 @@ pub enum ItemType{
     Large_Fry,
     Null,
 }
-
+#[derive(Clone)]
 pub struct Item {
     name: ItemType,
     customizations: Vec<String>,
@@ -82,7 +88,13 @@ impl Item {
             number:1 as f32,
         }
     }
+    pub fn cook(&self){
+        println!("{} started cooking",self.str_name);
+        thread::sleep(time::Duration::from_millis(1000));
+        println!("{} finished cooking",self.str_name);
+    }
 }
+#[derive(Clone)]
 pub struct Order {
     inventory: Vec<Item>,
 }
@@ -91,6 +103,21 @@ impl Order {
         Order {
             inventory: vec![],
         }
+    }
+    fn inventory(&mut self, ui: &mut Ui) {
+        for (n, item) in self.inventory.iter().enumerate() {
+            let mut label = (&item.str_name).to_owned();
+            label.push_str(" - ");
+            label.push_str(&item.number.to_string());
+            let drag = Group::new(hash!("inventory", n), Vec2::new(370., 50.))
+                .draggable(true)
+                .ui(ui, |ui| {
+                    ui.label(Vec2::new(5., 10.), &label);
+                });
+        }
+    }
+    fn clear(&mut self){
+        self.inventory.clear();
     }
 }
 
@@ -252,8 +279,28 @@ async fn main() {
     let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
     let worker4: Texture2D = load_texture("images/worker4.png").await.unwrap();
     let worker5: Texture2D = load_texture("images/worker5.png").await.unwrap();
+
+    // let worker1: Texture2D = load_texture("images/nowak.png").await.unwrap();
+    // let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
+    // let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
+    // let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
+    // let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
+
     
-    let mut Order = Order::new();
+    let mut order = Order::new();
+
+    let floor_tile = Color::from_rgba(226, 222, 221, 100);
+    let counter = Color::from_rgba(255, 228, 196, 255);
+    let burger_floor = Color::from_rgba(138, 43, 226, 30);
+    let grill = Color::from_rgba(220, 220, 220, 255);
+    let grill2 = Color::from_rgba(169, 169, 169, 200);
+    let oil = Color::from_rgba(255, 215, 0, 150);
+    let fries_floor = Color::from_rgba(175, 238, 238, 30);
+    let drink_floor = Color::from_rgba(255, 250, 205, 50);
+    let machine = Color::from_rgba(255, 215, 0, 170);
+    let box_crate = Color::from_rgba(160, 82, 45, 255);
+    let cashier_floor = Color::from_rgba(255, 127, 80, 30);
+    let assembly_floor = Color::from_rgba(152, 251, 152, 30);
 
 loop {
         
@@ -261,8 +308,7 @@ loop {
     
     draw_rectangle_lines(10.0, 10.0, 1085.0, 880.0, 20.0, BLACK);
 
-    let floor_tile = Color::from_rgba(226, 222, 221, 100);
-    let counter = Color::from_rgba(255, 228, 196, 255);
+    
 
     for n in (33..1080).step_by(17) {
         let a = n as f32;
@@ -277,7 +323,7 @@ loop {
     //far right, x = 1085
     
     //burger
-    let burger_floor = Color::from_rgba(138, 43, 226, 30);
+    
     draw_rectangle(20.0, 20.0, 400.0, 300.0, WHITE);
     draw_rectangle(20.0, 20.0, 400.0, 300.0, burger_floor);
 
@@ -285,8 +331,7 @@ loop {
 
     //decorations
     draw_rectangle(20.0, 20.0, 105.0, 300.0, counter);
-    let grill = Color::from_rgba(220, 220, 220, 255);
-    let grill2 = Color::from_rgba(169, 169, 169, 200);
+
     draw_rectangle(20.0, 20.0, 90.0, 193.0, grill);
 
     for n in (32..210).step_by(8) {
@@ -310,7 +355,6 @@ loop {
 
 
     //fries
-    let fries_floor = Color::from_rgba(175, 238, 238, 30);
     draw_rectangle(20.0, 300.0, 400.0, 300.0, WHITE);
     draw_rectangle(20.0, 300.0, 400.0, 300.0, fries_floor);
     
@@ -320,13 +364,11 @@ loop {
     draw_rectangle(20.0, 300.0, 105.0, 300.0, counter);
     //draw_rectangle(20.0, 490.0, 400.0, 100.0, counter);
     draw_rectangle(20.0, 305.0, 90.0, 193.0, grill);
-    let oil = Color::from_rgba(255, 215, 0, 150);
     draw_rectangle(25.0, 310.0, 80.0, 180.0, oil);
 
     //fries(30.0, 320.0).await;
 
     //drinks
-    let drink_floor = Color::from_rgba(255, 250, 205, 50);
     draw_rectangle(20.0, 580.0, 580.0, 300.0, WHITE);
     draw_rectangle(20.0, 580.0, 580.0, 300.0, drink_floor);
     
@@ -336,7 +378,6 @@ loop {
     draw_rectangle(20.0, 580.0, 105.0, 300.0, counter);
     draw_rectangle(20.0, 780.0, 600.0, 100.0, counter);
 
-    let machine = Color::from_rgba(255, 215, 0, 170);
     //tea
     draw_rectangle(30.0, 595.0, 80.0, 80.0, machine);
     draw_text("Tea", 35.0, 610.0, 20.0, BLACK);
@@ -350,7 +391,6 @@ loop {
     draw_rectangle(300.0, 790.0, 150.0, 80.0, machine);
     draw_text("Smoothies", 305.0, 805.0, 20.0, BLACK);
 
-    let box_crate = Color::from_rgba(160, 82, 45, 255);
     draw_rectangle(465.0, 790.0, 120.0, 80.0, box_crate);
     /*
     draw_circle(470.0, 800.0, 15.0, WHITE);
@@ -360,7 +400,6 @@ loop {
     draw_circle(520.0, 850.0, 15.0, WHITE);
     */
     //cashier
-    let cashier_floor = Color::from_rgba(255, 127, 80, 30);
     draw_rectangle(600.0, 630.0, 485.0, 250.0, WHITE);
     draw_rectangle(600.0, 630.0, 485.0, 250.0, cashier_floor);
     
@@ -372,7 +411,6 @@ loop {
     //cashier(990.0, 790.0).await;
     
     //assembly 
-    let assembly_floor = Color::from_rgba(152, 251, 152, 30);
     draw_rectangle(610.0, 20.0, 475.0, 510.0, WHITE);
     draw_rectangle(610.0, 20.0, 475.0, 510.0, assembly_floor);
     
@@ -398,7 +436,7 @@ loop {
         draw_texture_ex(
             worker1,
             150.0,
-            0.0,
+            50.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -408,7 +446,7 @@ loop {
         draw_texture_ex(
             worker2,
             150.0,
-            400.0,
+            325.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -417,8 +455,8 @@ loop {
         );
         draw_texture_ex(
             worker3,
-            500.0,
-            0.0,
+            150.0,
+            575.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -427,8 +465,8 @@ loop {
         );
         draw_texture_ex(
             worker4,
-            150.0,
-            200.0,
+            800.0,
+            75.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -437,8 +475,8 @@ loop {
         );
         draw_texture_ex(
             worker5,
-            600.0,
-            400.0,
+            800.0,
+            575.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -446,7 +484,6 @@ loop {
             },
         );
 
-       
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {
@@ -454,45 +491,45 @@ loop {
             ui.tree_node(hash!(), "Burgers", |ui| {
                 if ui.button(None, "Hamburger") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Hamburger") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Hamburger") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Hamburger"));
+                        order.inventory.push(Item::new("Hamburger"));
                     }
                     println!("Hamburger added");
                 }
                 ui.separator();
                 if ui.button(None, "Cheeseburger") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Cheeseburger") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Cheeseburger") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Cheeseburger"));
+                        order.inventory.push(Item::new("Cheeseburger"));
                     }
                     println!("Cheeseburger added");
                 }
                 ui.separator();
                 if ui.button(None, "Double Hamburger") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Double Hamburger") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Double Hamburger") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Double Hamburger"));
+                        order.inventory.push(Item::new("Double Hamburger"));
                     }
                     println!("Double Hamburger added");
                     
@@ -500,75 +537,75 @@ loop {
                 ui.separator();
                 if ui.button(None, "Double Cheeseburger") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Double Cheeseburger") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Double Cheeseburger") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Double Cheeseburger"));
+                        order.inventory.push(Item::new("Double Cheeseburger"));
                     }
                     println!("Double Cheeseburger added");
                 }
                 ui.separator();
                 if ui.button(None, "McDouble") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "McDouble") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "McDouble") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("McDouble"));
+                        order.inventory.push(Item::new("McDouble"));
                     }
                     println!("McDouble added");
                 }
                 ui.separator();
                 if ui.button(None, "Big Mac") {
                    let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Big Mac") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Big Mac") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Big Mac"));
+                        order.inventory.push(Item::new("Big Mac"));
                     }
                     println!("Big Mac added");
                 }
                 ui.separator();
                 if ui.button(None, "Quarter Pounder") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Quarter Pounder") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Quarter Pounder") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Quarter Pounder"));
+                        order.inventory.push(Item::new("Quarter Pounder"));
                     }
                     println!("Quarter Pounder added");
                 }
                 ui.separator();
                 if ui.button(None, "Quarter Pounder with Cheese") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Quarter Pounder with Cheese") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Quarter Pounder with Cheese") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Quarter Pounder with Cheese"));
+                        order.inventory.push(Item::new("Quarter Pounder with Cheese"));
                     }
                     println!("Quarter Pounder with Cheese added");
                     
@@ -576,30 +613,30 @@ loop {
                 ui.separator();
                 if ui.button(None, "Double Quarter Pounder") {
                    let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Double Quarter Pounder") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Double Quarter Pounder") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Double Quarter Pounder"));
+                        order.inventory.push(Item::new("Double Quarter Pounder"));
                     }
                     println!("Double Quarter Pounder added");
                 }
                 ui.separator();
                 if ui.button(None, "Double Quarter Pounder with Cheese") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Double Quarter Pounder with Cheese") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Double Quarter Pounder with Cheese") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Double Quarter Pounder with Cheese"));
+                        order.inventory.push(Item::new("Double Quarter Pounder with Cheese"));
                     }
                     println!("Double Quarter Pounder with Cheese added");
                 }
@@ -608,45 +645,45 @@ loop {
             ui.tree_node(hash!(), "Fries", |ui| {
                 if ui.button(None, "Small Fry") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Small Fry") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Small Fry") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Small Fry"));
+                        order.inventory.push(Item::new("Small Fry"));
                     }
                     println!("Small Fry added");
                 }
                 ui.separator();
                 if ui.button(None, "Medium Fry") {
                    let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Medium Fry") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Medium Fry") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Medium Fry"));
+                        order.inventory.push(Item::new("Medium Fry"));
                     }
                     println!("Medium Fry added");
                 }
                 ui.separator();
                 if ui.button(None, "Large Fry") {
                     let mut duplicate_item: bool = false; 
-                    for i in 0..Order.inventory.len() {
-                        if (Order.inventory[i].str_name == "Large Fry") {
-                            Order.inventory[i].number += 1.0;
+                    for i in 0..order.inventory.len() {
+                        if (order.inventory[i].str_name == "Large Fry") {
+                            order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
                         }
                     }
                     if !duplicate_item {
-                        Order.inventory.push(Item::new("Large Fry"));
+                        order.inventory.push(Item::new("Large Fry"));
                     }
                     println!("Large Fry added");
                 }
@@ -656,12 +693,28 @@ loop {
                 println!("Order Placed!");
                 println!("");
                 println!("Here are the details of your order: ");
-                for x in &Order.inventory {
+                let mut handles = Vec::new();
+                let mut placed_order = order.inventory.clone();
+                for x in placed_order {
+                    let y = x.clone();
+                    let item_cooking = thread::spawn(move|| {
+                        y.cook();
+                    });
+                    handles.push(item_cooking);
                     println!("{:?}: ({:?})", x.str_name, x.number);
                 }
+                order.clear();
             }
         });
 
+    widgets::Window::new(hash!(), vec2(1110., 450.), vec2(300., 400.))
+    .label("Order")
+    .titlebar(true)
+    .ui(&mut *root_ui(), |ui| {
+        Group::new(hash!(), Vec2::new(290., 380.)).ui(ui, |ui| {
+            order.inventory(ui);
+        });
+    });
 
         next_frame().await
     }

@@ -269,11 +269,11 @@ fn boxes() {
 async fn main() {
     //adding image into program
     
-    let lettuce: Texture2D = load_texture("images/lettuce.png").await.unwrap();
-    let tomato: Texture2D = load_texture("images/tomato.png").await.unwrap();
-    let tom: Texture2D = load_texture("images/tom.png").await.unwrap();
-    let fries: Texture2D = load_texture("images/fries.png").await.unwrap();
-    let cashier: Texture2D = load_texture("images/register.png").await.unwrap();
+    let lettuce_t: Texture2D = load_texture("images/lettuce.png").await.unwrap();
+    let tomato_t: Texture2D = load_texture("images/tomato.png").await.unwrap();
+    let tom_t: Texture2D = load_texture("images/tom.png").await.unwrap();
+    let fries_t: Texture2D = load_texture("images/fries.png").await.unwrap();
+    let cashier_t: Texture2D = load_texture("images/register.png").await.unwrap();
     
 
     // let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
@@ -412,7 +412,7 @@ loop {
     //decorations
     draw_rectangle(600.0, 780.0, 485.0, 100.0, counter);
 
-    //cashier(990.0, 790.0).await;
+    cashier(990.0, 790.0, cashier_t).await;
     
     //assembly 
     draw_rectangle(610.0, 20.0, 475.0, 510.0, WHITE);

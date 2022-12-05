@@ -101,7 +101,7 @@ impl Item {
         }
     }
     pub fn cook(&self){
-        for i in range(1..self.number){
+        for i in 1..self.number{
             println!("{} started cooking",self.str_name);
             thread::sleep(time::Duration::from_millis(self.cooking_time as u64)); //time to cook
             println!("{} finished cooking",self.str_name);

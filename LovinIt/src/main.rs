@@ -331,7 +331,7 @@ loop {
     draw_rectangle(20.0, 20.0, 400.0, 300.0, WHITE);
     draw_rectangle(20.0, 20.0, 400.0, 300.0, burger_floor);
 
-    draw_text("Burgers", 335.0, 40.0, 25.0, BLACK);
+    draw_text("Grill", 360.0, 40.0, 25.0, BLACK);
 
     //decorations
     draw_rectangle(20.0, 20.0, 105.0, 300.0, counter);
@@ -362,7 +362,7 @@ loop {
     draw_rectangle(20.0, 300.0, 400.0, 300.0, WHITE);
     draw_rectangle(20.0, 300.0, 400.0, 300.0, fries_floor);
     
-    draw_text("Fries", 360.0, 323.0, 25.0, BLACK);
+    draw_text("Frying", 350.0, 323.0, 25.0, BLACK);
 
     //decorations
     draw_rectangle(20.0, 300.0, 105.0, 300.0, counter);

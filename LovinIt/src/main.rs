@@ -86,16 +86,16 @@ impl Item {
                 _=> 500
             },
             ingredients:match item_type{
-                "Hamburger"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()], //done
-                "Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()], //done
+                "Hamburger"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
                 "Double Hamburger"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Double Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "cheese".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()], //done
-                "McDouble"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Big Mac"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Quarter Pounder"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Quarter Pounder with Cheese"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Double Quarter Pounder"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Double Quarter Pounder with Cheese"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Double Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "cheese".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "McDouble"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Big Mac"=>vec!["big mac bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "mac sauce".to_string(), "pickles".to_string(), "lettuce".to_string()],
+                "Quarter Pounder"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "ketchup".to_string(), "onions slivers".to_string(), "mustard".to_string()],
+                "Quarter Pounder with Cheese"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "ketchup".to_string(), "onions slivers".to_string(),"cheese".to_string(), "cheese".to_string(),"mustard".to_string()],
+                "Double Quarter Pounder"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "quarter beef patty".to_string(),"ketchup".to_string(), "onions slivers".to_string(), "mustard".to_string()],
+                "Double Quarter Pounder with Cheese"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "quarter beef patty".to_string(),"ketchup".to_string(), "onions slivers".to_string(),"cheese".to_string(), "cheese".to_string(), "mustard".to_string()],
                 _=> vec![]
             },
         }
@@ -127,7 +127,7 @@ impl Order {
                 .draggable(true)
                 .ui(ui, |ui| {
                     ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
-                    if ui.button(None, "-") {
+                    if ui.button(Vec2::new(260., 10.), "-") {
                         self.inventory[i].number -= 1;
                     }
                 });
@@ -293,7 +293,7 @@ async fn main() {
     let fries_t: Texture2D = load_texture("images/fries.png").await.unwrap();
     let cashier_t: Texture2D = load_texture("images/register.png").await.unwrap();
     
-    /*
+    
     // let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
     // let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
     // let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
@@ -307,7 +307,7 @@ async fn main() {
     let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
     let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
     let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
-    */
+    
     
     let mut order = Order::new();
 
@@ -453,7 +453,7 @@ loop {
 
     //drawing the image
     //texture methods for image manipulation
-    /*
+    
     //https://github.com/not-fl3/macroquad/blob/master/src/texture.rs
         draw_texture_ex(
             worker1,
@@ -505,7 +505,6 @@ loop {
                 ..Default::default()
             },
         );
-        */
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {
@@ -832,7 +831,15 @@ loop {
                     println!("Regular Soda added");
                 }
             });
-            if ui.button(None, "Place Order") {
+        });
+
+    widgets::Window::new(hash!(), vec2(1110., 450.), vec2(300., 400.))
+    .label("Order")
+    .titlebar(true)
+    .ui(&mut *root_ui(), |ui| {
+        Group::new(hash!(), Vec2::new(290., 380.)).ui(ui, |ui| {
+            order.inventory(ui);
+            if ui.button(Vec2::new(102., order.inventory.len() as f32 * 52.0 + 10 as f32), "Place Order") {
                 println!("Order Placed!");
                 println!("");
                 println!("Here are the details of your order: ");
@@ -848,14 +855,6 @@ loop {
                 }
                 order.clear();
             }
-        });
-
-    widgets::Window::new(hash!(), vec2(1110., 450.), vec2(300., 400.))
-    .label("Order")
-    .titlebar(true)
-    .ui(&mut *root_ui(), |ui| {
-        Group::new(hash!(), Vec2::new(290., 380.)).ui(ui, |ui| {
-            order.inventory(ui);
         });
     });
 

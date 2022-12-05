@@ -26,6 +26,14 @@ pub enum ItemType{
     SmallFry,
     MediumFry,
     LargeFry,
+    McNuggets4,
+    McNuggets6,
+    McNuggets10,
+    McNuggets20,
+    RegularCoffee,
+    RegularTea,
+    RegularSmoothie,
+    RegularSoda,
     Null,
 }
 #[derive(Clone)]
@@ -52,6 +60,14 @@ impl Item {
                 "Quarter Pounder with Cheese"=>ItemType::QuarterPounderWithCheese,
                 "Double Quarter Pounder"=>ItemType::DoubleQuarterPounder,
                 "Double Quarter Pounder with Cheese"=>ItemType::DoubleQuarterPounderWithCheese,
+                "4 McNuggets"=>ItemType::McNuggets4,
+                "6 McNuggets"=>ItemType::McNuggets6,
+                "10 McNuggets"=>ItemType::McNuggets10,
+                "20 McNuggets"=>ItemType::McNuggets20,
+                "Regular Coffee"=>ItemType::RegularCoffee,
+                "Regular Tea"=>ItemType::RegularTea,
+                "Regular Smoothie"=>ItemType::RegularSmoothie,
+                "Regular Soda"=>ItemType::RegularSoda,
                 _=> ItemType::Null
             },
             customizations:vec![],
@@ -648,7 +664,7 @@ loop {
                 }
                 ui.separator();
             });
-            ui.tree_node(hash!(), "Fries", |ui| {
+            ui.tree_node(hash!(), "Sides", |ui| {
                 if ui.button(None, "Small Fry") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
@@ -665,7 +681,7 @@ loop {
                 }
                 ui.separator();
                 if ui.button(None, "Medium Fry") {
-                   let mut duplicate_item: bool = false; 
+                    let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Medium Fry" {
                             order.inventory[i].number += 1;
@@ -694,6 +710,127 @@ loop {
                     println!("Large Fry added");
                 }
                 ui.separator();
+                if ui.button(None, "4 McNuggets") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..order.inventory.len() {
+                        if order.inventory[i].str_name == "4 McNuggets" {
+                            order.inventory[i].number += 1;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        order.inventory.push(Item::new("4 McNuggets"));
+                    }
+                    println!("4 McNuggets added");
+                }
+                ui.separator();
+                if ui.button(None, "6 McNuggets") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..order.inventory.len() {
+                        if order.inventory[i].str_name == "6 McNuggets" {
+                            order.inventory[i].number += 1;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        order.inventory.push(Item::new("6 McNuggets"));
+                    }
+                    println!("6 McNuggets added");
+                }
+                ui.separator();
+                if ui.button(None, "10 McNuggets") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..order.inventory.len() {
+                        if order.inventory[i].str_name == "10 McNuggets" {
+                            order.inventory[i].number += 1;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        order.inventory.push(Item::new("10 McNuggets"));
+                    }
+                    println!("10 McNuggets added");
+                }
+                ui.separator();
+                if ui.button(None, "20 McNuggets") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..order.inventory.len() {
+                        if order.inventory[i].str_name == "20 McNuggets" {
+                            order.inventory[i].number += 1;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        order.inventory.push(Item::new("20 McNuggets"));
+                    }
+                    println!("20 McNuggets added");
+                }
+                ui.separator();
+            });
+            ui.tree_node(hash!(), "Drinks", |ui| {
+                if ui.button(None, "Regular Coffee") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..order.inventory.len() {
+                        if order.inventory[i].str_name == "Regular Coffee" {
+                            order.inventory[i].number += 1;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        order.inventory.push(Item::new("Regular Coffee"));
+                    }
+                    println!("Regular Coffee added");
+                }
+                ui.separator();
+                if ui.button(None, "Regular Tea") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..order.inventory.len() {
+                        if order.inventory[i].str_name == "Regular Tea" {
+                            order.inventory[i].number += 1;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        order.inventory.push(Item::new("Regular Tea"));
+                    }
+                    println!("Regular Tea added");
+                }
+                ui.separator();
+                if ui.button(None, "Regular Smoothie") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..order.inventory.len() {
+                        if order.inventory[i].str_name == "Regular Smoothie" {
+                            order.inventory[i].number += 1;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        order.inventory.push(Item::new("Regular Smoothie"));
+                    }
+                    println!("Regular Smoothie added");
+                }
+                ui.separator();
+                if ui.button(None, "Regular Soda") {
+                    let mut duplicate_item: bool = false; 
+                    for i in 0..order.inventory.len() {
+                        if order.inventory[i].str_name == "Regular Soda" {
+                            order.inventory[i].number += 1;
+                            duplicate_item = true;
+                            break;
+                        }
+                    }
+                    if !duplicate_item {
+                        order.inventory.push(Item::new("Regular Soda"));
+                    }
+                    println!("Regular Soda added");
+                }
             });
             if ui.button(None, "Place Order") {
                 println!("Order Placed!");

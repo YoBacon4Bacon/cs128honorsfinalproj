@@ -70,16 +70,16 @@ impl Item {
                 _=> 500
             },
             ingredients:match item_type{
-                "Hamburger"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()], //done
-                "Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()], //done
+                "Hamburger"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
                 "Double Hamburger"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Double Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "cheese".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()], //done
-                "McDouble"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Big Mac"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Quarter Pounder"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Quarter Pounder with Cheese"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Double Quarter Pounder"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Double Quarter Pounder with Cheese"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Double Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "cheese".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "McDouble"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Big Mac"=>vec!["big mac bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "mac sauce".to_string(), "pickles".to_string(), "lettuce".to_string()],
+                "Quarter Pounder"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "ketchup".to_string(), "onions slivers".to_string(), "mustard".to_string()],
+                "Quarter Pounder with Cheese"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "ketchup".to_string(), "onions slivers".to_string(),"cheese".to_string(), "cheese".to_string(),"mustard".to_string()],
+                "Double Quarter Pounder"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "quarter beef patty".to_string(),"ketchup".to_string(), "onions slivers".to_string(), "mustard".to_string()],
+                "Double Quarter Pounder with Cheese"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "quarter beef patty".to_string(),"ketchup".to_string(), "onions slivers".to_string(),"cheese".to_string(), "cheese".to_string(), "mustard".to_string()],
                 _=> vec![]
             },
         }
@@ -277,7 +277,7 @@ async fn main() {
     let fries_t: Texture2D = load_texture("images/fries.png").await.unwrap();
     let cashier_t: Texture2D = load_texture("images/register.png").await.unwrap();
     
-    /*
+    
     // let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
     // let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
     // let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
@@ -291,7 +291,7 @@ async fn main() {
     let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
     let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
     let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
-    */
+    
     
     let mut order = Order::new();
 
@@ -437,7 +437,7 @@ loop {
 
     //drawing the image
     //texture methods for image manipulation
-    /*
+    
     //https://github.com/not-fl3/macroquad/blob/master/src/texture.rs
         draw_texture_ex(
             worker1,
@@ -489,7 +489,6 @@ loop {
                 ..Default::default()
             },
         );
-        */
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {
@@ -648,7 +647,7 @@ loop {
                 }
                 ui.separator();
             });
-            ui.tree_node(hash!(), "Fries", |ui| {
+            ui.tree_node(hash!(), "Sides", |ui| {
                 if ui.button(None, "Small Fry") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {

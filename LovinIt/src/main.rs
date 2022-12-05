@@ -33,38 +33,9 @@ pub struct Item {
     name: ItemType,
     customizations: Vec<String>,
     str_name: String,
-    number: f32,
-}
-
-pub struct Hamburger {
+    number: i32,
+    cooking_time: i32,
     ingredients: Vec<String>,
-}
-impl Default for Hamburger {
-    fn default() -> Hamburger {
-        Hamburger {
-            ingredients: vec!["reg bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-        }
-    }
-}
-pub struct Cheeseburger {
-    ingredients: Vec<String>,
-}
-impl Default for Cheeseburger {
-    fn default() -> Cheeseburger {
-        Cheeseburger {
-            ingredients: vec!["reg bun".to_string(), "beef patty".to_string(), "amer cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-        }
-    }
-}
-pub struct McDouble {
-    ingredients: Vec<String>,
-}
-impl Default for McDouble {
-    fn default() -> McDouble {
-        McDouble {
-            ingredients: vec!["reg bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "amer cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-        }
-    }
 }
 
 impl Item {
@@ -85,12 +56,37 @@ impl Item {
             },
             customizations:vec![],
             str_name:item_type.to_string(),
-            number:1 as f32,
+            number:1,
+            cooking_time:match item_type{
+                "Hamburger"=>1000,
+                "Double Hamburger"=>1500,
+                "Double Cheeseburger"=>1500,
+                "McDouble"=>900,
+                "Big Mac"=>1200,
+                "Quarter Pounder"=>1500,
+                "Quarter Pounder with Cheese"=>1600,
+                "Double Quarter Pounder"=>1700,
+                "Double Quarter Pounder with Cheese"=>1900,
+                _=> 500
+            },
+            ingredients:match item_type{
+                "Hamburger"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()], //done
+                "Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()], //done
+                "Double Hamburger"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Double Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "cheese".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()], //done
+                "McDouble"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Big Mac"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Quarter Pounder"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Quarter Pounder with Cheese"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Double Quarter Pounder"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                "Double Quarter Pounder with Cheese"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
+                _=> vec![]
+            },
         }
     }
     pub fn cook(&self){
         println!("{} started cooking",self.str_name);
-        thread::sleep(time::Duration::from_millis(1000));
+        thread::sleep(time::Duration::from_millis(self.cooking_time as u64)); //time to cook
         println!("{} finished cooking",self.str_name);
     }
 }
@@ -105,15 +101,21 @@ impl Order {
         }
     }
     fn inventory(&mut self, ui: &mut Ui) {
-        for (n, item) in self.inventory.iter().enumerate() {
+        let mut i: usize = 0;
+        for (n, item) in self.inventory.clone().iter().enumerate() {
+            self.inventory.retain(|x| x.number != 0);
             let mut label = (&item.str_name).to_owned();
-            label.push_str(" - ");
+            label.push_str("   ");
             label.push_str(&item.number.to_string());
-            let drag = Group::new(hash!("inventory", n), Vec2::new(370., 50.))
+            let drag = Group::new(hash!("inventory", n), Vec2::new(280., 50.)) //width, height
                 .draggable(true)
                 .ui(ui, |ui| {
-                    ui.label(Vec2::new(5., 10.), &label);
+                    ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
+                    if ui.button(None, "-") {
+                        self.inventory[i].number -= 1;
+                    }
                 });
+            i += 1;
         }
     }
     fn clear(&mut self){
@@ -123,7 +125,7 @@ impl Order {
 
 fn window_conf() -> Conf {
     Conf {
-        window_title: "Window name".to_owned(),
+        window_title: "WcDonalds".to_owned(),
         fullscreen: true,
         ..Default::default()
     }
@@ -497,7 +499,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Hamburger" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -512,7 +514,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Cheeseburger" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -527,7 +529,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Double Hamburger" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -543,7 +545,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Double Cheeseburger" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -558,7 +560,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "McDouble" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -573,7 +575,7 @@ loop {
                    let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Big Mac" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -588,7 +590,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Quarter Pounder" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -603,7 +605,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Quarter Pounder with Cheese" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -619,7 +621,7 @@ loop {
                    let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Double Quarter Pounder" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -634,7 +636,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Double Quarter Pounder with Cheese" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -651,7 +653,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Small Fry" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -666,7 +668,7 @@ loop {
                    let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Medium Fry" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -681,7 +683,7 @@ loop {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
                         if order.inventory[i].str_name == "Large Fry" {
-                            order.inventory[i].number += 1.0;
+                            order.inventory[i].number += 1;
                             duplicate_item = true;
                             break;
                         }
@@ -705,7 +707,7 @@ loop {
                         y.cook();
                     });
                     handles.push(item_cooking);
-                    println!("{:?}: ({:?})", x.str_name, x.number);
+                    println!("{}: ({:?})", x.str_name, x.number);
                 }
                 order.clear();
             }

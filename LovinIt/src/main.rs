@@ -15,17 +15,17 @@ use macroquad::ui::{
 pub enum ItemType{
     Hamburger,
     Cheeseburger,
-    Double_Hamburger,
-    Double_Cheeseburger,
+    DoubleHamburger,
+    DoubleCheeseburger,
     McDouble,
-    Big_Mac,
-    Quarter_Pounder,
-    Quarter_Pounder_with_Cheese,
-    Double_Quarter_Pounder,
-    Double_Quarter_Pounder_with_Cheese,
-    Small_Fry,
-    Medium_Fry,
-    Large_Fry,
+    BigMac,
+    QuarterPounder,
+    QuarterPounderWithCheese,
+    DoubleQuarterPounder,
+    DoubleQuarterPounderWithCheese,
+    SmallFry,
+    MediumFry,
+    LargeFry,
     Null,
 }
 #[derive(Clone)]
@@ -73,14 +73,14 @@ impl Item {
             name:match item_type{
                 "Hamburger"=>ItemType::Hamburger,
                 "Cheeseburger"=>ItemType::Cheeseburger,
-                "Double Hamburger"=>ItemType::Double_Hamburger,
-                "Double Cheeseburger"=>ItemType::Double_Cheeseburger,
+                "Double Hamburger"=>ItemType::DoubleHamburger,
+                "Double Cheeseburger"=>ItemType::DoubleCheeseburger,
                 "McDouble"=>ItemType::McDouble,
-                "Big Mac"=>ItemType::Big_Mac,
-                "Quarter Pounder"=>ItemType::Quarter_Pounder,
-                "Quarter Pounder with Cheese"=>ItemType::Quarter_Pounder_with_Cheese,
-                "Double Quarter Pounder"=>ItemType::Double_Quarter_Pounder,
-                "Double Quarter Pounder with Cheese"=>ItemType::Double_Quarter_Pounder_with_Cheese,
+                "Big Mac"=>ItemType::BigMac,
+                "Quarter Pounder"=>ItemType::QuarterPounder,
+                "Quarter Pounder with Cheese"=>ItemType::QuarterPounderWithCheese,
+                "Double Quarter Pounder"=>ItemType::DoubleQuarterPounder,
+                "Double Quarter Pounder with Cheese"=>ItemType::DoubleQuarterPounderWithCheese,
                 _=> ItemType::Null
             },
             customizations:vec![],
@@ -138,39 +138,39 @@ fn ham_bun(x : f32, y : f32) {
     ham_bot(x, y);
 
     pub struct Offset {
-        pub xCoord : f32,
-        pub yCoord : f32,
+        pub x_coord : f32,
+        pub y_coord : f32,
     }
 
     let mut vec : Vec<Offset> = Vec::new();
-    vec =  vec![Offset {xCoord : -18.0, yCoord : 0.0},
-                Offset {xCoord : -15.0, yCoord : -7.0},
-                Offset {xCoord : 5.0, yCoord : -7.0},
-                Offset {xCoord : -5.0, yCoord : -2.0},
-                Offset {xCoord : -10.0, yCoord : -18.0},
-                Offset {xCoord : -5.0, yCoord : -13.0},
-                Offset {xCoord : 7.0, yCoord : -17.0},
-                Offset {xCoord : 14.0, yCoord : -12.0},
-                Offset {xCoord : 15.0, yCoord : -3.0},
-                Offset {xCoord : 5.0, yCoord : 4.0},
-                Offset {xCoord : 17.0, yCoord : 5.0},
-                Offset {xCoord : -10.0, yCoord : 5.0},
-                Offset {xCoord : -17.0, yCoord : 10.0},
-                Offset {xCoord : -12.0, yCoord : 16.0},
-                Offset {xCoord : -3.0, yCoord : 10.0},
-                Offset {xCoord : -4.0, yCoord : 18.0},
-                Offset {xCoord : 5.0, yCoord : 15.0},
-                Offset {xCoord : 13.0, yCoord : 13.0}];
+    vec =  vec![Offset {x_coord : -18.0, y_coord : 0.0},
+                Offset {x_coord : -15.0, y_coord : -7.0},
+                Offset {x_coord : 5.0, y_coord : -7.0},
+                Offset {x_coord : -5.0, y_coord : -2.0},
+                Offset {x_coord : -10.0, y_coord : -18.0},
+                Offset {x_coord : -5.0, y_coord : -13.0},
+                Offset {x_coord : 7.0, y_coord : -17.0},
+                Offset {x_coord : 14.0, y_coord : -12.0},
+                Offset {x_coord : 15.0, y_coord : -3.0},
+                Offset {x_coord : 5.0, y_coord : 4.0},
+                Offset {x_coord : 17.0, y_coord : 5.0},
+                Offset {x_coord : -10.0, y_coord : 5.0},
+                Offset {x_coord : -17.0, y_coord : 10.0},
+                Offset {x_coord : -12.0, y_coord : 16.0},
+                Offset {x_coord : -3.0, y_coord : 10.0},
+                Offset {x_coord : -4.0, y_coord : 18.0},
+                Offset {x_coord : 5.0, y_coord : 15.0},
+                Offset {x_coord : 13.0, y_coord : 13.0}];
 
     let seed = Color::from_rgba(255, 235, 205, 250);
 
     for n in 0..18 {
-        draw_circle(vec[n].xCoord + x, vec[n].yCoord + y, 1.5, seed);
+        draw_circle(vec[n].x_coord + x, vec[n].y_coord + y, 1.5, seed);
     }
 }
 
 async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
-    let letSize = Vec2 {x: 50.0, y: 40.0};
+    let let_size = Vec2 {x: 50.0, y: 40.0};
 
     draw_texture_ex(
         lettuce,
@@ -178,14 +178,14 @@ async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
         y - 20.0,
         WHITE,
         DrawTextureParams {
-            dest_size: Some(letSize),
+            dest_size: Some(let_size),
             ..Default::default()
         },
     );
 }
 
-async fn tomato(x : f32, y : f32,tomato:Texture2D) {
-    let tomatoSize = Vec2 {x: 50.0, y: 50.0};
+async fn tomato(x : f32, y : f32, tomato:Texture2D) {
+    let tomato_size = Vec2 {x: 50.0, y: 50.0};
 
     draw_texture_ex(
         tomato,
@@ -193,14 +193,14 @@ async fn tomato(x : f32, y : f32,tomato:Texture2D) {
         y,
         WHITE,
         DrawTextureParams {
-            dest_size: Some(tomatoSize),
+            dest_size: Some(tomato_size),
             ..Default::default()
         },
     );
 }
 
-async fn tom(x : f32, y : f32,tom:Texture2D) {
-    let tomSize = Vec2 {x: 40.0, y: 40.0};
+async fn tom(x : f32, y : f32, tom:Texture2D) {
+    let tom_size = Vec2 {x: 40.0, y: 40.0};
 
     draw_texture_ex(
         tom,
@@ -208,14 +208,14 @@ async fn tom(x : f32, y : f32,tom:Texture2D) {
         y - 20.0,
         WHITE,
         DrawTextureParams {
-            dest_size: Some(tomSize),
+            dest_size: Some(tom_size),
             ..Default::default()
         },
     );
 }
 
-async fn fries(x : f32, y : f32,fries:Texture2D) {
-    let frySize = Vec2 {x: 50.0, y: 50.0};
+async fn fries(x : f32, y : f32, fries:Texture2D) {
+    let fry_size = Vec2 {x: 50.0, y: 50.0};
 
     draw_texture_ex(
         fries,
@@ -223,14 +223,14 @@ async fn fries(x : f32, y : f32,fries:Texture2D) {
         y,
         WHITE,
         DrawTextureParams {
-            dest_size: Some(frySize),
+            dest_size: Some(fry_size),
             ..Default::default()
         },
     );
 }
 
-async fn cashier(x : f32, y : f32,cashier:Texture2D) {
-    let cashSize = Vec2 {x: 90.0, y: 90.0};
+async fn cashier(x : f32, y : f32, cashier:Texture2D) {
+    let cash_size = Vec2 {x: 90.0, y: 90.0};
 
     draw_texture_ex(
         cashier,
@@ -238,7 +238,7 @@ async fn cashier(x : f32, y : f32,cashier:Texture2D) {
         y,
         WHITE,
         DrawTextureParams {
-            dest_size: Some(cashSize),
+            dest_size: Some(cash_size),
             ..Default::default()
         },
     );
@@ -246,7 +246,7 @@ async fn cashier(x : f32, y : f32,cashier:Texture2D) {
 
 fn burger(x : f32, y : f32) {
     let meat = Color::from_rgba(240, 128, 128, 225);
-    let cooked = Color::from_rgba(160, 82, 45, 225);
+    //let cooked = Color::from_rgba(160, 82, 45, 225);
     draw_circle(x, y, 10.0, meat);
 }
 
@@ -275,7 +275,7 @@ async fn main() {
     let fries_t: Texture2D = load_texture("images/fries.png").await.unwrap();
     let cashier_t: Texture2D = load_texture("images/register.png").await.unwrap();
     
-
+    /*
     // let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
     // let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
     // let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
@@ -289,7 +289,7 @@ async fn main() {
     let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
     let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
     let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
-
+    */
     
     let mut order = Order::new();
 
@@ -396,13 +396,7 @@ loop {
     draw_text("Smoothies", 305.0, 805.0, 20.0, BLACK);
 
     draw_rectangle(465.0, 790.0, 120.0, 80.0, box_crate);
-    /*
-    draw_circle(470.0, 800.0, 15.0, WHITE);
-    draw_circle(520.0, 800.0, 15.0, WHITE);
-    draw_circle(580.0, 800.0, 15.0, WHITE);
-    draw_circle(490.0, 840.0, 15.0, WHITE);
-    draw_circle(520.0, 850.0, 15.0, WHITE);
-    */
+    
     //cashier
     draw_rectangle(600.0, 630.0, 485.0, 250.0, WHITE);
     draw_rectangle(600.0, 630.0, 485.0, 250.0, cashier_floor);
@@ -425,6 +419,12 @@ loop {
     draw_rectangle(610.0, 325.0, 475.0, 75.0, counter);
     draw_rectangle(1010.0, 20.0, 75.0, 400.0, counter);
     boxes();
+    leaf(700.0, 300.0, lettuce_t).await;
+    ham_bot(800.0, 800.0);
+    ham_bun(900.0, 300.0);
+    tomato(600.0, 50.0, tomato_t).await;
+    tom(900.0, 700.0, tom_t).await;
+    fries(500.0, 300.0, fries_t).await;
 
     //partitions/walls
     draw_line(20.0, 300.0, 420.0, 300.0, 10.0, BLACK);
@@ -435,7 +435,7 @@ loop {
 
     //drawing the image
     //texture methods for image manipulation
-    
+    /*
     //https://github.com/not-fl3/macroquad/blob/master/src/texture.rs
         draw_texture_ex(
             worker1,
@@ -487,7 +487,7 @@ loop {
                 ..Default::default()
             },
         );
-
+        */
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {
@@ -496,7 +496,7 @@ loop {
                 if ui.button(None, "Hamburger") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Hamburger") {
+                        if order.inventory[i].str_name == "Hamburger" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -511,7 +511,7 @@ loop {
                 if ui.button(None, "Cheeseburger") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Cheeseburger") {
+                        if order.inventory[i].str_name == "Cheeseburger" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -526,7 +526,7 @@ loop {
                 if ui.button(None, "Double Hamburger") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Double Hamburger") {
+                        if order.inventory[i].str_name == "Double Hamburger" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -542,7 +542,7 @@ loop {
                 if ui.button(None, "Double Cheeseburger") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Double Cheeseburger") {
+                        if order.inventory[i].str_name == "Double Cheeseburger" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -557,7 +557,7 @@ loop {
                 if ui.button(None, "McDouble") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "McDouble") {
+                        if order.inventory[i].str_name == "McDouble" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -572,7 +572,7 @@ loop {
                 if ui.button(None, "Big Mac") {
                    let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Big Mac") {
+                        if order.inventory[i].str_name == "Big Mac" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -587,7 +587,7 @@ loop {
                 if ui.button(None, "Quarter Pounder") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Quarter Pounder") {
+                        if order.inventory[i].str_name == "Quarter Pounder" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -602,7 +602,7 @@ loop {
                 if ui.button(None, "Quarter Pounder with Cheese") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Quarter Pounder with Cheese") {
+                        if order.inventory[i].str_name == "Quarter Pounder with Cheese" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -618,7 +618,7 @@ loop {
                 if ui.button(None, "Double Quarter Pounder") {
                    let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Double Quarter Pounder") {
+                        if order.inventory[i].str_name == "Double Quarter Pounder" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -633,7 +633,7 @@ loop {
                 if ui.button(None, "Double Quarter Pounder with Cheese") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Double Quarter Pounder with Cheese") {
+                        if order.inventory[i].str_name == "Double Quarter Pounder with Cheese" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -650,7 +650,7 @@ loop {
                 if ui.button(None, "Small Fry") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Small Fry") {
+                        if order.inventory[i].str_name == "Small Fry" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -665,7 +665,7 @@ loop {
                 if ui.button(None, "Medium Fry") {
                    let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Medium Fry") {
+                        if order.inventory[i].str_name == "Medium Fry" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -680,7 +680,7 @@ loop {
                 if ui.button(None, "Large Fry") {
                     let mut duplicate_item: bool = false; 
                     for i in 0..order.inventory.len() {
-                        if (order.inventory[i].str_name == "Large Fry") {
+                        if order.inventory[i].str_name == "Large Fry" {
                             order.inventory[i].number += 1.0;
                             duplicate_item = true;
                             break;
@@ -698,7 +698,7 @@ loop {
                 println!("");
                 println!("Here are the details of your order: ");
                 let mut handles = Vec::new();
-                let mut placed_order = order.inventory.clone();
+                let placed_order = order.inventory.clone();
                 for x in placed_order {
                     let y = x.clone();
                     let item_cooking = thread::spawn(move|| {

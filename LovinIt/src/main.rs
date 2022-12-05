@@ -695,7 +695,15 @@ loop {
                 }
                 ui.separator();
             });
-            if ui.button(None, "Place Order") {
+        });
+
+    widgets::Window::new(hash!(), vec2(1110., 450.), vec2(300., 400.))
+    .label("Order")
+    .titlebar(true)
+    .ui(&mut *root_ui(), |ui| {
+        Group::new(hash!(), Vec2::new(290., 380.)).ui(ui, |ui| {
+            order.inventory(ui);
+            if ui.button(Vec2::new(102., order.inventory.len() as f32 * 52.0 + 10 as f32), "Place Order") {
                 println!("Order Placed!");
                 println!("");
                 println!("Here are the details of your order: ");
@@ -711,14 +719,6 @@ loop {
                 }
                 order.clear();
             }
-        });
-
-    widgets::Window::new(hash!(), vec2(1110., 450.), vec2(300., 400.))
-    .label("Order")
-    .titlebar(true)
-    .ui(&mut *root_ui(), |ui| {
-        Group::new(hash!(), Vec2::new(290., 380.)).ui(ui, |ui| {
-            order.inventory(ui);
         });
     });
 

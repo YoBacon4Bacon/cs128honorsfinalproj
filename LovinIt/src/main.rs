@@ -111,7 +111,7 @@ impl Order {
                 .draggable(true)
                 .ui(ui, |ui| {
                     ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
-                    if ui.button(None, "-") {
+                    if ui.button(Vec2::new(260., 10.), "-") {
                         self.inventory[i].number -= 1;
                     }
                 });

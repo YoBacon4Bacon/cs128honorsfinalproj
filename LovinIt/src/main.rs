@@ -92,16 +92,16 @@ impl Item {
                 _=> 500
             },
             assembly_time:match item_type{
-                "Hamburger"=>1000,
-                "Cheeseburger"=>1000,
-                "Double Hamburger"=>1500,
-                "Double Cheeseburger"=>1500,
-                "McDouble"=>900,
-                "Big Mac"=>1200,
-                "Quarter Pounder"=>1500,
-                "Quarter Pounder with Cheese"=>1600,
-                "Double Quarter Pounder"=>1700,
-                "Double Quarter Pounder with Cheese"=>1900,
+                "Hamburger"=>500,
+                "Cheeseburger"=>500,
+                "Double Hamburger"=>500,
+                "Double Cheeseburger"=>500,
+                "McDouble"=>500,
+                "Big Mac"=>500,
+                "Quarter Pounder"=>500,
+                "Quarter Pounder with Cheese"=>500,
+                "Double Quarter Pounder"=>500,
+                "Double Quarter Pounder with Cheese"=>500,
                 _=> 500
             },
             ingredients:match item_type{
@@ -954,6 +954,7 @@ loop {
 
     let mut assembly_ready = true;
     for i in 0..assembly_orders.clone().len() {
+        assembly_ready = true;
         let placed_order = &assembly_orders.clone()[i];
         let placed_order_num = placed_order.inventory[0].order_num;
 
@@ -988,6 +989,7 @@ loop {
 
         if (assembly_ready) {
             println!("{:?} is ready!!!!!", placed_order_num);
+            thread::sleep(time::Duration::from_millis(500)); //time to assemble
             assembly_orders.drain(i..(i + 1));
             break;
         }

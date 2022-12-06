@@ -3,6 +3,7 @@ use macroquad::color::Color;
 use std::thread;
 use std::thread::JoinHandle;
 use std::time;
+use std::sync::mpsc;
 
 
 use macroquad::ui::{
@@ -77,6 +78,7 @@ impl Item {
             number:1,
             cooking_time:match item_type{
                 "Hamburger"=>1000,
+                "Cheeseburger"=>1000,
                 "Double Hamburger"=>1500,
                 "Double Cheeseburger"=>1500,
                 "McDouble"=>900,
@@ -93,15 +95,16 @@ impl Item {
                 "Double Hamburger"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
                 "Double Cheeseburger"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "cheese".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
                 "McDouble"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "cheese".to_string(), "ketchup".to_string(), "pickles".to_string(), "onions".to_string(), "mustard".to_string()],
-                "Big Mac"=>vec!["big mac bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "mac sauce".to_string(), "pickles".to_string(), "lettuce".to_string()],
-                "Quarter Pounder"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "ketchup".to_string(), "onions slivers".to_string(), "mustard".to_string()],
-                "Quarter Pounder with Cheese"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "ketchup".to_string(), "onions slivers".to_string(),"cheese".to_string(), "cheese".to_string(),"mustard".to_string()],
-                "Double Quarter Pounder"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "quarter beef patty".to_string(),"ketchup".to_string(), "onions slivers".to_string(), "mustard".to_string()],
-                "Double Quarter Pounder with Cheese"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "quarter beef patty".to_string(),"ketchup".to_string(), "onions slivers".to_string(),"cheese".to_string(), "cheese".to_string(), "mustard".to_string()],
+                "Big Mac"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(), "mac sauce".to_string(), "pickles".to_string(), "lettuce".to_string()],
+                "Quarter Pounder"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "onions slivers".to_string(), "mustard".to_string()],
+                "Quarter Pounder with Cheese"=>vec!["bun".to_string(), "beef patty".to_string(), "ketchup".to_string(), "onions slivers".to_string(),"cheese".to_string(), "cheese".to_string(),"mustard".to_string()],
+                "Double Quarter Pounder"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(),"ketchup".to_string(), "onions slivers".to_string(), "mustard".to_string()],
+                "Double Quarter Pounder with Cheese"=>vec!["bun".to_string(), "beef patty".to_string(), "beef patty".to_string(),"ketchup".to_string(), "onions slivers".to_string(),"cheese".to_string(), "cheese".to_string(), "mustard".to_string()],
                 _=> vec![]
             },
             starting_station:match item_type{
                 "Hamburger"=>"grill".to_string(),
+                "Cheeseburger"=>"grill".to_string(),
                 "Double Hamburger"=>"grill".to_string(),
                 "Double Cheeseburger"=>"grill".to_string(),
                 "McDouble"=>"grill".to_string(),
@@ -128,24 +131,66 @@ impl Item {
     }
     pub fn cook(&self){
         for i in 0..self.number{
-            println!("{} started cooking",self.str_name);
+            println!("{} started cooking - {}",self.str_name, self.order_num.to_string());
             thread::sleep(time::Duration::from_millis(self.cooking_time as u64)); //time to cook
             println!("{} finished cooking",self.str_name);
         }
     }
 }
 
+#[derive(Clone)]
 pub struct GrillStation {
     queue: Vec<Item>,
 }
+impl GrillStation {
+    pub fn new() -> GrillStation {
+        GrillStation {
+            queue: vec![],
+        }
+    }
+    pub fn cook(&mut self){
+        while self.queue.clone().len() > (0 as usize) {
+            let item = &self.queue[0];
+            item.cook();
+            self.queue.drain(0..1);
+        }
+    }
+}
+
+#[derive(Clone)]
 pub struct FryStation {
     queue: Vec<Item>,
 }
+impl FryStation {
+    pub fn new() -> FryStation {
+        FryStation {
+            queue: vec![],
+        }
+    }
+}
+
+#[derive(Clone)]
 pub struct DrinkStation {
     queue: Vec<Item>,
 }
+impl DrinkStation {
+    pub fn new() -> DrinkStation {
+        DrinkStation {
+            queue: vec![],
+        }
+    }
+}
+
+#[derive(Clone)]
 pub struct AssemblyStation {
     queue: Vec<Item>,
+}
+impl AssemblyStation {
+    pub fn new() -> AssemblyStation {
+        AssemblyStation {
+            queue: vec![],
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -343,7 +388,15 @@ fn boxes() {
 #[macroquad::main(window_conf)]
 async fn main() {
 
+    let (tx, rx) = mpsc::channel();
+    let mut first_time = true;
+    let mut in_progress = false;
+
     let mut order_number: i32 = 1;
+    let mut grill_station = GrillStation::new();
+    let mut fry_station = FryStation::new();
+    let mut drink_station = DrinkStation::new();
+    let mut assembly_station = AssemblyStation::new();
 
     //adding image into program
     
@@ -370,6 +423,7 @@ async fn main() {
     
     
     let mut order = Order::new();
+    let mut orders:Vec<Order> = vec![];
 
     let floor_tile = Color::from_rgba(226, 222, 221, 100);
     let counter = Color::from_rgba(255, 228, 196, 255);
@@ -671,24 +725,47 @@ loop {
             order.inventory(ui);
             if ui.button(Vec2::new(102., order.inventory.len() as f32 * 52.0 + 10 as f32), "Place Order") {
                 println!("Order Placed!");
-                println!("");
-                println!("Here are the details of your order: ");
-                let mut handles = Vec::new();
-                let placed_order = order.inventory.clone();
-                for x in placed_order {
-                    let y = x.clone();
-                    let item_cooking = thread::spawn(move|| {
-                        y.cook();
-                    });
-                    handles.push(item_cooking);
-                    println!("{}: ({:?})", x.str_name, x.number);
-                }
+                //cache order
+                orders.push(order.clone());
                 order.clear();
+                grill_station.queue.clear();
                 order_number += 1;
             }
         });
     });
 
+    //if first==true or rx has been received (no processes running in background) 
+    //pop from orders vector to get next order in line
+    //separate into different starting stations
+    //run thread
+    let tx1 = tx.clone();
+    //no processes running in background and order is ready to process
+    if (orders.len() == 0 && !rx.try_iter().next().is_none()) {
+        first_time = true;
+    }
+    
+    if (!rx.try_iter().next().is_none() || first_time) && orders.clone().len() > 0 { 
+        first_time = false;
+        let placed_order = orders[0].clone().inventory; //get order
+        orders.drain(0..1);
+
+        for item in placed_order { //add to grilling station queue
+            let final_item = item.clone();
+            if final_item.starting_station == "grill" {
+                grill_station.queue.push(final_item);
+            }
+        }
+
+        let mut y = grill_station.clone();
+        let item_cooking = thread::spawn(move || {
+            y.cook();
+            if y.queue.clone().len() == (0 as usize) {
+                let val = true;
+                tx1.send(val).unwrap();
+            }
+        });
+    }
+                
         next_frame().await
     }
 }

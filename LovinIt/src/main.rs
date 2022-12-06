@@ -44,10 +44,12 @@ pub struct Item {
     number: i32,
     cooking_time: i32,
     ingredients: Vec<String>,
+    starting_station: String,
+    order_num: i32,
 }
 
 impl Item {
-    pub fn new(item_type:&str) -> Item{
+    pub fn new(item_type:&str, order_number:i32) -> Item{
         Item{
             name:match item_type{
                 "Hamburger"=>ItemType::Hamburger,
@@ -98,16 +100,54 @@ impl Item {
                 "Double Quarter Pounder with Cheese"=>vec!["bun".to_string(), "quarter beef patty".to_string(), "quarter beef patty".to_string(),"ketchup".to_string(), "onions slivers".to_string(),"cheese".to_string(), "cheese".to_string(), "mustard".to_string()],
                 _=> vec![]
             },
+            starting_station:match item_type{
+                "Hamburger"=>"grill".to_string(),
+                "Double Hamburger"=>"grill".to_string(),
+                "Double Cheeseburger"=>"grill".to_string(),
+                "McDouble"=>"grill".to_string(),
+                "Big Mac"=>"grill".to_string(),
+                "Quarter Pounder"=>"grill".to_string(),
+                "Quarter Pounder with Cheese"=>"grill".to_string(),
+                "Double Quarter Pounder"=>"grill".to_string(),
+                "Double Quarter Pounder with Cheese"=>"grill".to_string(),
+                "4 McNuggets"=>"fry".to_string(),
+                "6 McNuggets"=>"fry".to_string(),
+                "10 McNuggets"=>"fry".to_string(),
+                "20 McNuggets"=>"fry".to_string(),
+                "Small Fry"=>"fry".to_string(),
+                "Medium Fry"=>"fry".to_string(),
+                "Large Fry"=>"fry".to_string(),
+                "Regular Coffee"=>"drink".to_string(),
+                "Regular Tea"=>"drink".to_string(),
+                "Regular Soda"=>"drink".to_string(),
+                "Regular Smoothie"=>"drink".to_string(),
+                _=> "".to_string()
+            },
+            order_num:order_number,
         }
     }
     pub fn cook(&self){
-        for i in 1..self.number{
+        for i in 0..self.number{
             println!("{} started cooking",self.str_name);
             thread::sleep(time::Duration::from_millis(self.cooking_time as u64)); //time to cook
             println!("{} finished cooking",self.str_name);
         }
     }
 }
+
+pub struct GrillStation {
+    queue: Vec<Item>,
+}
+pub struct FryStation {
+    queue: Vec<Item>,
+}
+pub struct DrinkStation {
+    queue: Vec<Item>,
+}
+pub struct AssemblyStation {
+    queue: Vec<Item>,
+}
+
 #[derive(Clone)]
 pub struct Order {
     inventory: Vec<Item>,
@@ -287,6 +327,9 @@ fn boxes() {
 //#[macroquad::main("lovin_it")]
 #[macroquad::main(window_conf)]
 async fn main() {
+
+    let mut order_number: i32 = 1;
+
     //adding image into program
     
     let lettuce_t: Texture2D = load_texture("images/lettuce.png").await.unwrap();
@@ -522,7 +565,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Hamburger"));
+                        order.inventory.push(Item::new("Hamburger", order_number));
                     }
                     println!("Hamburger added");
                 }
@@ -537,7 +580,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Cheeseburger"));
+                        order.inventory.push(Item::new("Cheeseburger", order_number));
                     }
                     println!("Cheeseburger added");
                 }
@@ -552,7 +595,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Double Hamburger"));
+                        order.inventory.push(Item::new("Double Hamburger", order_number));
                     }
                     println!("Double Hamburger added");
                     
@@ -568,7 +611,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Double Cheeseburger"));
+                        order.inventory.push(Item::new("Double Cheeseburger", order_number));
                     }
                     println!("Double Cheeseburger added");
                 }
@@ -583,7 +626,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("McDouble"));
+                        order.inventory.push(Item::new("McDouble", order_number));
                     }
                     println!("McDouble added");
                 }
@@ -598,7 +641,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Big Mac"));
+                        order.inventory.push(Item::new("Big Mac", order_number));
                     }
                     println!("Big Mac added");
                 }
@@ -613,7 +656,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Quarter Pounder"));
+                        order.inventory.push(Item::new("Quarter Pounder", order_number));
                     }
                     println!("Quarter Pounder added");
                 }
@@ -628,7 +671,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Quarter Pounder with Cheese"));
+                        order.inventory.push(Item::new("Quarter Pounder with Cheese", order_number));
                     }
                     println!("Quarter Pounder with Cheese added");
                     
@@ -644,7 +687,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Double Quarter Pounder"));
+                        order.inventory.push(Item::new("Double Quarter Pounder", order_number));
                     }
                     println!("Double Quarter Pounder added");
                 }
@@ -659,7 +702,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Double Quarter Pounder with Cheese"));
+                        order.inventory.push(Item::new("Double Quarter Pounder with Cheese", order_number));
                     }
                     println!("Double Quarter Pounder with Cheese added");
                 }
@@ -676,7 +719,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Small Fry"));
+                        order.inventory.push(Item::new("Small Fry", order_number));
                     }
                     println!("Small Fry added");
                 }
@@ -691,7 +734,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Medium Fry"));
+                        order.inventory.push(Item::new("Medium Fry", order_number));
                     }
                     println!("Medium Fry added");
                 }
@@ -706,7 +749,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Large Fry"));
+                        order.inventory.push(Item::new("Large Fry", order_number));
                     }
                     println!("Large Fry added");
                 }
@@ -721,7 +764,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("4 McNuggets"));
+                        order.inventory.push(Item::new("4 McNuggets", order_number));
                     }
                     println!("4 McNuggets added");
                 }
@@ -736,7 +779,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("6 McNuggets"));
+                        order.inventory.push(Item::new("6 McNuggets", order_number));
                     }
                     println!("6 McNuggets added");
                 }
@@ -751,7 +794,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("10 McNuggets"));
+                        order.inventory.push(Item::new("10 McNuggets", order_number));
                     }
                     println!("10 McNuggets added");
                 }
@@ -766,7 +809,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("20 McNuggets"));
+                        order.inventory.push(Item::new("20 McNuggets", order_number));
                     }
                     println!("20 McNuggets added");
                 }
@@ -783,7 +826,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Regular Coffee"));
+                        order.inventory.push(Item::new("Regular Coffee", order_number));
                     }
                     println!("Regular Coffee added");
                 }
@@ -798,7 +841,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Regular Tea"));
+                        order.inventory.push(Item::new("Regular Tea", order_number));
                     }
                     println!("Regular Tea added");
                 }
@@ -813,7 +856,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Regular Smoothie"));
+                        order.inventory.push(Item::new("Regular Smoothie", order_number));
                     }
                     println!("Regular Smoothie added");
                 }
@@ -828,7 +871,7 @@ loop {
                         }
                     }
                     if !duplicate_item {
-                        order.inventory.push(Item::new("Regular Soda"));
+                        order.inventory.push(Item::new("Regular Soda", order_number));
                     }
                     println!("Regular Soda added");
                 }
@@ -856,6 +899,7 @@ loop {
                     println!("{}: ({:?})", x.str_name, x.number);
                 }
                 order.clear();
+                order_number += 1;
             }
         });
     });

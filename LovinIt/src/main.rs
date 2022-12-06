@@ -264,6 +264,7 @@ fn window_conf() -> Conf {
 fn ham_bot(x : f32, y : f32) {
     let burg = Color::from_rgba(244, 164, 96, 250);
     draw_circle(x, y, 26.0, burg);
+    draw_circle(x + 5.5, y, 26.0, burg);
 }
 
 fn ham_bun(x : f32, y : f32) {
@@ -274,8 +275,7 @@ fn ham_bun(x : f32, y : f32) {
         pub y_coord : f32,
     }
 
-    let mut vec : Vec<Offset> = Vec::new();
-    vec =  vec![Offset {x_coord : -18.0, y_coord : 0.0},
+    let vec : Vec<Offset> =  vec![Offset {x_coord : -18.0, y_coord : 0.0},
                 Offset {x_coord : -15.0, y_coord : -7.0},
                 Offset {x_coord : 5.0, y_coord : -7.0},
                 Offset {x_coord : -5.0, y_coord : -2.0},
@@ -292,22 +292,26 @@ fn ham_bun(x : f32, y : f32) {
                 Offset {x_coord : -3.0, y_coord : 10.0},
                 Offset {x_coord : -4.0, y_coord : 18.0},
                 Offset {x_coord : 5.0, y_coord : 15.0},
-                Offset {x_coord : 13.0, y_coord : 13.0}];
-
+                Offset {x_coord : 13.0, y_coord : 13.0},
+                
+                Offset {x_coord : 22.5, y_coord : -8.0},
+                Offset {x_coord : 25.5, y_coord : 3.0},
+                Offset {x_coord : 20.5, y_coord : 11.0}];
+    
     let seed = Color::from_rgba(255, 235, 205, 250);
 
-    for n in 0..18 {
+    for n in 0..21 {
         draw_circle(vec[n].x_coord + x, vec[n].y_coord + y, 1.5, seed);
     }
 }
 
 async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
     let let_size = Vec2 {x: 50.0, y: 40.0};
-
+    
     draw_texture_ex(
         lettuce,
-        x - 25.0,
-        y - 20.0,
+        x - 23.5,
+        y - 19.0,
         WHITE,
         DrawTextureParams {
             dest_size: Some(let_size),
@@ -315,7 +319,7 @@ async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
         },
     );
 }
-
+/*
 async fn tomato(x : f32, y : f32, tomato:Texture2D) {
     let tomato_size = Vec2 {x: 50.0, y: 50.0};
 
@@ -330,14 +334,14 @@ async fn tomato(x : f32, y : f32, tomato:Texture2D) {
         },
     );
 }
-
+*/
 async fn tom(x : f32, y : f32, tom:Texture2D) {
     let tom_size = Vec2 {x: 40.0, y: 40.0};
-
+    
     draw_texture_ex(
         tom,
-        x - 20.0,
-        y - 20.0,
+        x - 16.5,
+        y - 19.0,
         WHITE,
         DrawTextureParams {
             dest_size: Some(tom_size),
@@ -376,10 +380,16 @@ async fn cashier(x : f32, y : f32, cashier:Texture2D) {
     );
 }
 
-fn burger(x : f32, y : f32) {
+fn raw_meat(x : f32, y : f32) {
     let meat = Color::from_rgba(240, 128, 128, 225);
     //let cooked = Color::from_rgba(160, 82, 45, 225);
-    draw_circle(x, y, 10.0, meat);
+    draw_circle(x, y, 23.0, meat);
+}
+
+fn cooked_meat(x : f32, y : f32) {
+    let cooked = Color::from_rgba(160, 82, 45, 225);
+    draw_circle(x + 2.5, y, 23.0, cooked);
+    //draw_circle(504.0, 599.0, 23.0, RED);
 }
 
 fn boxes() {
@@ -394,6 +404,108 @@ fn boxes() {
     draw_rectangle(795.0, 330.0, 60.0, 60.0, grill);
     draw_rectangle(720.0, 330.0, 60.0, 60.0, grill);
     draw_rectangle(620.0, 330.0, 85.0, 60.0, grill);
+}
+
+fn ketchup(x : f32, y : f32) {
+    pub struct Offset {
+        pub x_coord : f32,
+        pub y_coord : f32,
+        pub rad : f32,
+    }
+
+    let vec : Vec<Offset> =  vec![Offset {x_coord : -11.5, y_coord : 1.0, rad : 10.0},
+                Offset {x_coord : -1.5, y_coord : 9.0, rad : 10.0},
+                Offset {x_coord : 8.5, y_coord : 6.0, rad : 13.0},
+                Offset {x_coord : -1.5, y_coord : -9.0, rad : 8.0},
+                Offset {x_coord : 11.5, y_coord : -9.0, rad : 10.0}];
+
+    for n in 0..5 {
+        draw_circle(vec[n].x_coord + x, vec[n].y_coord + y, vec[n].rad, RED);
+    }
+}
+
+fn mustard(x : f32, y : f32) {
+    pub struct Offset {
+        pub x_coord : f32,
+        pub y_coord : f32,
+        pub rad : f32,
+    }
+
+    let vec : Vec<Offset> =  vec![Offset {x_coord : -11.5, y_coord : 1.0, rad : 10.0},
+                Offset {x_coord : -1.5, y_coord : 9.0, rad : 10.0},
+                Offset {x_coord : 8.5, y_coord : 6.0, rad : 13.0},
+                Offset {x_coord : -1.5, y_coord : -9.0, rad : 8.0},
+                Offset {x_coord : 11.5, y_coord : -9.0, rad : 10.0}];
+
+    for n in 0..5 {
+        draw_circle(vec[n].x_coord + x, vec[n].y_coord + y, vec[n].rad, YELLOW);
+    }
+}
+
+fn pickles(x : f32, y : f32) {
+    pub struct Offset {
+        pub x_coord : f32,
+        pub y_coord : f32,
+    }
+
+    let pick = Color::from_rgba(143, 188, 143, 255);
+    
+    let vec : Vec<Offset> =  vec![Offset {x_coord : 13.5, y_coord : -9.0},
+                Offset {x_coord : -11.5, y_coord : 0.0},
+                Offset {x_coord : 8.5, y_coord : 11.0}];
+    
+    for n in 0..3 {
+        draw_circle(vec[n].x_coord + x, vec[n].y_coord + y, 8.75, DARKGREEN);
+    }
+
+    for n in 0..3 {
+        draw_circle(vec[n].x_coord + x, vec[n].y_coord + y, 7.0, pick);
+    }
+}
+
+fn onions(x : f32, y : f32) {
+    pub struct Offset {
+        pub x_coord : f32,
+        pub y_coord : f32,
+        pub rad : f32,
+    }
+    
+    let oni = Color::from_rgba(255, 255, 240, 255);
+    
+    let vec : Vec<Offset> =  vec![Offset {x_coord : -7.5, y_coord : 3.0, rad : 10.0},
+                Offset {x_coord : 2.5, y_coord : -11.0, rad : 13.0},
+                Offset {x_coord : 8.5, y_coord : -1.0, rad : 8.0},
+                Offset {x_coord : 1.0, y_coord : 10.0, rad : 10.0}];
+
+    for n in 0..4 {
+        draw_circle_lines(vec[n].x_coord + x, vec[n].y_coord + y, 8.0, 3.0, oni);
+    }
+}
+
+fn cheese(x : f32, y : f32) {
+    let chee = Color::from_rgba(255, 215, 0, 255);
+    draw_rectangle(x - 18.5, y - 19.0, 40.0, 40.0, chee);
+}
+
+fn hamburger(x : f32, y : f32) {
+    ham_bot(x - 1.5, y + 14.0);
+    cooked_meat(x - 1.5, y + 11.6);
+    ketchup(x - 1.5, y + 9.5);
+    pickles(x - 1.5, y + 7.0);
+    onions(x - 1.5, y + 4.5);
+    mustard(x - 1.5, y - 2.5);
+    ham_bun(x - 1.5, y - 15.0);
+}
+
+fn cheeseburger(x : f32, y : f32) {
+    ham_bot(x - 1.5, y + 19.0);
+    cooked_meat(x - 1.5, y + 16.6);
+    cheese(x - 1.5, y + 13.0);
+    ketchup(x - 1.5, y + 11.0);
+    pickles(x - 1.5, y + 8.0);
+    onions(x - 1.5, y + 5.0);
+    mustard(x - 1.5, y + 1.0);
+    ham_bun(x - 1.5, y - 11.0);
 }
 
 //#[macroquad::main("lovin_it")]
@@ -499,8 +611,7 @@ loop {
     }
 
     draw_rectangle(28.0, 230.0, 90.0, 50.0, grill);
-    burger(50.0, 250.0);
-
+    raw_meat(68.0, 254.5);
 
     //fries
     draw_rectangle(20.0, 300.0, 400.0, 300.0, WHITE);
@@ -563,12 +674,9 @@ loop {
     draw_rectangle(610.0, 325.0, 475.0, 75.0, counter);
     draw_rectangle(1010.0, 20.0, 75.0, 400.0, counter);
     boxes();
-    leaf(700.0, 300.0, lettuce_t).await;
-    ham_bot(800.0, 800.0);
-    ham_bun(900.0, 300.0);
-    tomato(600.0, 50.0, tomato_t).await;
-    tom(900.0, 700.0, tom_t).await;
-    fries(500.0, 300.0, fries_t).await;
+    
+    hamburger(500.0, 700.0);
+    cheeseburger(500.0, 400.0);
 
     //partitions/walls
     draw_line(20.0, 300.0, 420.0, 300.0, 10.0, BLACK);

@@ -155,6 +155,18 @@ impl GrillStation {
             self.queue.drain(0..1);
         }
     }
+    fn display(&mut self, ui: &mut Ui) {
+        for (n, item) in self.queue.clone().iter().enumerate() {
+            let mut label = (&item.str_name).to_owned();
+            label.push_str("   ");
+            label.push_str(&item.order_num.to_string());
+            let drag = Group::new(hash!("inventory", n), Vec2::new(280., 50.)) //width, height
+                .draggable(true)
+                .ui(ui, |ui| {
+                    ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
+                });
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -728,7 +740,6 @@ loop {
                 //cache order
                 orders.push(order.clone());
                 order.clear();
-                grill_station.queue.clear();
                 order_number += 1;
             }
         });
@@ -740,11 +751,16 @@ loop {
     //run thread
     let tx1 = tx.clone();
     //no processes running in background and order is ready to process
-    if (orders.len() == 0 && !rx.try_iter().next().is_none()) {
+    if orders.len() == 0 && (!rx.try_iter().next().is_none()) {
+        grill_station.queue.clear();
         first_time = true;
     }
     
     if (!rx.try_iter().next().is_none() || first_time) && orders.clone().len() > 0 { 
+        grill_station.queue.clear();
+        if (!rx.try_iter().next().is_none()) {
+            let receiver = rx.recv().unwrap();
+        }
         first_time = false;
         let placed_order = orders[0].clone().inventory; //get order
         orders.drain(0..1);
@@ -765,6 +781,15 @@ loop {
             }
         });
     }
+
+    widgets::Window::new(hash!(), vec2(1450., 450.), vec2(300., 400.))
+    .label("Grill Station")
+    .titlebar(true)
+    .ui(&mut *root_ui(), |ui| {
+        Group::new(hash!(), Vec2::new(290., 380.)).ui(ui, |ui| {
+            grill_station.display(ui);
+        });
+    });
                 
         next_frame().await
     }

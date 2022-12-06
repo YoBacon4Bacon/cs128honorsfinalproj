@@ -878,8 +878,11 @@ loop {
             });
         });
 
+    let mut label = "Order ".to_owned();
+    label.push_str(&order_number.to_string());
+
     widgets::Window::new(hash!(), vec2(1110., 450.), vec2(300., 400.))
-    .label("Order")
+    .label(&label)
     .titlebar(true)
     .ui(&mut *root_ui(), |ui| {
         Group::new(hash!(), Vec2::new(290., 380.)).ui(ui, |ui| {

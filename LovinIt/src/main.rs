@@ -1012,7 +1012,6 @@ loop {
     if grill_orders.clone().len() > 0 && (grill_empty || (!received_grill2.is_none() && received_grill2.unwrap() == "grill")) { 
         grill_station.queue.clear();
         let placed_order = grill_orders[0].clone().inventory; //get order
-
         grill_empty = false;
 
         for item in placed_order { //add to grilling station queue
@@ -1029,14 +1028,18 @@ loop {
                 txg.send(val).unwrap();
             }
         });
-
-        
     }
-
 
     //all fry orders have been processed  
     let received_fry1 = received.clone();  
     let received_fry2 = received.clone();  
+    let received_fry3 = received.clone();  
+
+    //check if order has been completed
+    if (!received_fry3.is_none() && received_fry3.unwrap() == "fry") {
+        fry_orders.drain(0..1);
+    }
+
     if fry_orders.len() == 0 && (!received_fry1.is_none() && received_fry1.unwrap() == "fry") {
         fry_station.queue.clear();
         fry_empty = true;
@@ -1047,7 +1050,6 @@ loop {
         fry_station.queue.clear();
         fry_empty = false;
         let placed_order = fry_orders[0].clone().inventory; //get order
-        fry_orders.drain(0..1);
 
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
@@ -1069,6 +1071,13 @@ loop {
     //all drink orders have been processed  
     let received_drink1 = received.clone();  
     let received_drink2 = received.clone();  
+    let received_drink3 = received.clone();  
+
+    //check if order has been completed
+    if (!received_drink3.is_none() && received_drink3.unwrap() == "drink") {
+        drink_orders.drain(0..1);
+    }
+
     if drink_orders.len() == 0 && (!received_drink1.is_none() && received_drink1.unwrap() == "drink") {
         drink_station.queue.clear();
         drink_empty = true;
@@ -1079,7 +1088,6 @@ loop {
         drink_station.queue.clear();
         drink_empty = false;
         let placed_order = drink_orders[0].clone().inventory; //get order
-        drink_orders.drain(0..1);
 
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
@@ -1124,7 +1132,23 @@ loop {
             drink_station.display(ui);
         });
     });
-                
+
+    widgets::Window::new(hash!(), vec2(650., 70.), vec2(290., 150.))
+    .label("Assembly Station")
+    .titlebar(true)
+    .ui(&mut *root_ui(), |ui| {
+        Group::new(hash!(), Vec2::new(280., 140.)).ui(ui, |ui| {
+            for (n, placed_order) in assembly_orders.clone().iter().enumerate() {
+                let mut label = "Order ".to_owned();
+                label.push_str(&placed_order.inventory[0].order_num.to_string());
+                let drag = Group::new(hash!("assembly station", n), Vec2::new(270., 50.)) //width, height
+                    .draggable(true)
+                    .ui(ui, |ui| {
+                        ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
+                    });
+            }
+        });
+    });    
         next_frame().await
     }
 }

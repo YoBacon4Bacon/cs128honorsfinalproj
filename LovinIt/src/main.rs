@@ -47,6 +47,7 @@ pub struct Item {
     ingredients: Vec<String>,
     starting_station: String,
     order_num: i32,
+    status: String,
 }
 
 impl Item {
@@ -127,13 +128,14 @@ impl Item {
                 _=> "".to_string()
             },
             order_num:order_number,
+            status:"in progress".to_string(),
         }
     }
-    pub fn cook(&self){
-        for i in 0..self.number{
-            println!("{} started cooking - {}",self.str_name, self.order_num.to_string());
-            thread::sleep(time::Duration::from_millis(self.cooking_time as u64)); //time to cook
-            println!("{} finished cooking",self.str_name);
+    pub fn cook(&mut self){
+        for i in 0..self.clone().number{
+            println!("{} started cooking - {}",self.clone().str_name, self.clone().order_num.to_string());
+            thread::sleep(time::Duration::from_millis(self.clone().cooking_time as u64)); //time to cook
+            println!("{} finished cooking",self.clone().str_name);
         }
     }
 }
@@ -150,7 +152,7 @@ impl GrillStation {
     }
     pub fn cook(&mut self){
         while self.queue.clone().len() > (0 as usize) {
-            let item = &self.queue[0];
+            let mut item = &mut self.queue[0];
             item.cook();
             self.queue.drain(0..1);
         }
@@ -160,7 +162,7 @@ impl GrillStation {
             let mut label = (&item.str_name).to_owned();
             label.push_str("   ");
             label.push_str(&item.order_num.to_string());
-            let drag = Group::new(hash!("inventory", n), Vec2::new(280., 50.)) //width, height
+            let drag = Group::new(hash!("grill station", n), Vec2::new(270., 50.)) //width, height
                 .draggable(true)
                 .ui(ui, |ui| {
                     ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
@@ -179,6 +181,25 @@ impl FryStation {
             queue: vec![],
         }
     }
+    pub fn cook(&mut self){
+        while self.queue.clone().len() > (0 as usize) {
+            let mut item = &mut self.queue[0];
+            item.cook();
+            self.queue.drain(0..1);
+        }
+    }
+    fn display(&mut self, ui: &mut Ui) {
+        for (n, item) in self.queue.clone().iter().enumerate() {
+            let mut label = (&item.str_name).to_owned();
+            label.push_str("   ");
+            label.push_str(&item.order_num.to_string());
+            let drag = Group::new(hash!("fry station", n), Vec2::new(270., 50.)) //width, height
+                .draggable(true)
+                .ui(ui, |ui| {
+                    ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
+                });
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -189,6 +210,25 @@ impl DrinkStation {
     pub fn new() -> DrinkStation {
         DrinkStation {
             queue: vec![],
+        }
+    }
+    pub fn cook(&mut self){
+        while self.queue.clone().len() > (0 as usize) {
+            let mut item = &mut self.queue[0];
+            item.cook();
+            self.queue.drain(0..1);
+        }
+    }
+    fn display(&mut self, ui: &mut Ui) {
+        for (n, item) in self.queue.clone().iter().enumerate() {
+            let mut label = (&item.str_name).to_owned();
+            label.push_str("   ");
+            label.push_str(&item.order_num.to_string());
+            let drag = Group::new(hash!("drink station", n), Vec2::new(270., 50.)) //width, height
+                .draggable(true)
+                .ui(ui, |ui| {
+                    ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
+                });
         }
     }
 }
@@ -401,8 +441,10 @@ fn boxes() {
 async fn main() {
 
     let (tx, rx) = mpsc::channel();
-    let mut first_time = true;
-    let mut in_progress = false;
+    let mut grill_empty = true;
+    let mut fry_empty = true;
+    let mut drink_empty = true;
+    let mut assembly_empty = true;
 
     let mut order_number: i32 = 1;
     let mut grill_station = GrillStation::new();
@@ -427,15 +469,19 @@ async fn main() {
 
 
     
-    let worker1: Texture2D = load_texture("images/nowak.png").await.unwrap();
-    let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
-    let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
-    let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
-    let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
+    // let worker1: Texture2D = load_texture("images/nowak.png").await.unwrap();
+    // let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
+    // let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
+    // let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
+    // let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
     
     
     let mut order = Order::new();
     let mut orders:Vec<Order> = vec![];
+    let mut grill_orders:Vec<Order> = vec![];
+    let mut fry_orders:Vec<Order> = vec![];
+    let mut drink_orders:Vec<Order> = vec![];
+    let mut assembly_orders:Vec<Order> = vec![];
 
     let floor_tile = Color::from_rgba(226, 222, 221, 100);
     let counter = Color::from_rgba(255, 228, 196, 255);
@@ -581,56 +627,56 @@ loop {
     //texture methods for image manipulation
     
     //https://github.com/not-fl3/macroquad/blob/master/src/texture.rs
-        draw_texture_ex(
-            worker1,
-            150.0,
-            50.0,
-            WHITE,
-            DrawTextureParams {
-                dest_size: None,
-                ..Default::default()
-            },
-        );
-        draw_texture_ex(
-            worker2,
-            150.0,
-            325.0,
-            WHITE,
-            DrawTextureParams {
-                dest_size: None,
-                ..Default::default()
-            },
-        );
-        draw_texture_ex(
-            worker3,
-            150.0,
-            575.0,
-            WHITE,
-            DrawTextureParams {
-                dest_size: None,
-                ..Default::default()
-            },
-        );
-        draw_texture_ex(
-            worker4,
-            800.0,
-            75.0,
-            WHITE,
-            DrawTextureParams {
-                dest_size: None,
-                ..Default::default()
-            },
-        );
-        draw_texture_ex(
-            worker5,
-            800.0,
-            575.0,
-            WHITE,
-            DrawTextureParams {
-                dest_size: None,
-                ..Default::default()
-            },
-        );
+        // draw_texture_ex(
+        //     worker1,
+        //     150.0,
+        //     50.0,
+        //     WHITE,
+        //     DrawTextureParams {
+        //         dest_size: None,
+        //         ..Default::default()
+        //     },
+        // );
+        // draw_texture_ex(
+        //     worker2,
+        //     150.0,
+        //     325.0,
+        //     WHITE,
+        //     DrawTextureParams {
+        //         dest_size: None,
+        //         ..Default::default()
+        //     },
+        // );
+        // draw_texture_ex(
+        //     worker3,
+        //     150.0,
+        //     575.0,
+        //     WHITE,
+        //     DrawTextureParams {
+        //         dest_size: None,
+        //         ..Default::default()
+        //     },
+        // );
+        // draw_texture_ex(
+        //     worker4,
+        //     800.0,
+        //     75.0,
+        //     WHITE,
+        //     DrawTextureParams {
+        //         dest_size: None,
+        //         ..Default::default()
+        //     },
+        // );
+        // draw_texture_ex(
+        //     worker5,
+        //     800.0,
+        //     575.0,
+        //     WHITE,
+        //     DrawTextureParams {
+        //         dest_size: None,
+        //         ..Default::default()
+        //     },
+        // );
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {
@@ -738,7 +784,31 @@ loop {
             if ui.button(Vec2::new(102., order.inventory.len() as f32 * 52.0 + 10 as f32), "Place Order") {
                 println!("Order Placed!");
                 //cache order
-                orders.push(order.clone());
+                //orders.push(order.clone());
+                for item in order.clone().inventory { //add to grilling station queue
+                    let final_item = item.clone();
+                    if final_item.starting_station == "grill" {
+                        grill_orders.push(order.clone());
+                        break;
+                    }
+                }
+
+                for item in order.clone().inventory { //add to grilling station queue
+                    let final_item = item.clone();
+                    if final_item.starting_station == "fry" {
+                        fry_orders.push(order.clone());
+                        break;
+                    }
+                }
+
+                for item in order.clone().inventory { //add to grilling station queue
+                    let final_item = item.clone();
+                    if final_item.starting_station == "drink" {
+                        drink_orders.push(order.clone());
+                        break;
+                    }
+                }
+
                 order.clear();
                 order_number += 1;
             }
@@ -749,21 +819,27 @@ loop {
     //pop from orders vector to get next order in line
     //separate into different starting stations
     //run thread
-    let tx1 = tx.clone();
-    //no processes running in background and order is ready to process
-    if orders.len() == 0 && (!rx.try_iter().next().is_none()) {
+
+    let txg = tx.clone(); //grill
+    let txf = tx.clone(); //fry
+    let txd = tx.clone(); //drink
+    let txa = tx.clone(); //assembly
+    let received = rx.try_iter().next();
+    let received_grill1 = received.clone();
+    let received_grill2 = received.clone();
+
+    //all grill orders have been processed    
+    if grill_orders.len() == 0 && (!received_grill1.is_none() && received_grill1.unwrap() == "grill") {
         grill_station.queue.clear();
-        first_time = true;
+        grill_empty = true;
     }
     
-    if (!rx.try_iter().next().is_none() || first_time) && orders.clone().len() > 0 { 
+    //there are grill orders ready to process and no grill orders running in background
+    if grill_orders.clone().len() > 0 && (grill_empty || (!received_grill2.is_none() && received_grill2.unwrap() == "grill")) { 
         grill_station.queue.clear();
-        if (!rx.try_iter().next().is_none()) {
-            let receiver = rx.recv().unwrap();
-        }
-        first_time = false;
-        let placed_order = orders[0].clone().inventory; //get order
-        orders.drain(0..1);
+        grill_empty = false;
+        let placed_order = grill_orders[0].clone().inventory; //get order
+        grill_orders.drain(0..1);
 
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
@@ -776,18 +852,101 @@ loop {
         let item_cooking = thread::spawn(move || {
             y.cook();
             if y.queue.clone().len() == (0 as usize) {
-                let val = true;
-                tx1.send(val).unwrap();
+                let val = String::from("grill");
+                txg.send(val).unwrap();
             }
         });
     }
 
-    widgets::Window::new(hash!(), vec2(1450., 450.), vec2(300., 400.))
+
+    //all fry orders have been processed  
+    let received_fry1 = received.clone();  
+    let received_fry2 = received.clone();  
+    if fry_orders.len() == 0 && (!received_fry1.is_none() && received_fry1.unwrap() == "fry") {
+        fry_station.queue.clear();
+        fry_empty = true;
+    }
+    
+    //there are fry orders ready to process and no fry orders running in background
+    if fry_orders.clone().len() > 0 && (fry_empty || (!received_fry2.is_none() && received_fry2.unwrap() == "fry")) { 
+        fry_station.queue.clear();
+        fry_empty = false;
+        let placed_order = fry_orders[0].clone().inventory; //get order
+        fry_orders.drain(0..1);
+
+        for item in placed_order { //add to grilling station queue
+            let final_item = item.clone();
+            if final_item.starting_station == "fry" {
+                fry_station.queue.push(final_item);
+            }
+        }
+
+        let mut y = fry_station.clone();
+        let item_cooking = thread::spawn(move || {
+            y.cook();
+            if y.queue.clone().len() == (0 as usize) {
+                let val = String::from("fry");
+                txf.send(val).unwrap();
+            }
+        });
+    }
+
+    //all drink orders have been processed  
+    let received_drink1 = received.clone();  
+    let received_drink2 = received.clone();  
+    if drink_orders.len() == 0 && (!received_drink1.is_none() && received_drink1.unwrap() == "drink") {
+        drink_station.queue.clear();
+        drink_empty = true;
+    }
+    
+    //there are drink orders ready to process and no drink orders running in background
+    if drink_orders.clone().len() > 0 && (drink_empty || (!received_drink2.is_none() && received_drink2.unwrap() == "drink")) { 
+        drink_station.queue.clear();
+        drink_empty = false;
+        let placed_order = drink_orders[0].clone().inventory; //get order
+        drink_orders.drain(0..1);
+
+        for item in placed_order { //add to grilling station queue
+            let final_item = item.clone();
+            if final_item.starting_station == "drink" {
+                drink_station.queue.push(final_item);
+            }
+        }
+
+        let mut y = drink_station.clone();
+        let item_cooking = thread::spawn(move || {
+            y.cook();
+            if y.queue.clone().len() == (0 as usize) {
+                let val = String::from("drink");
+                txd.send(val).unwrap();
+            }
+        });
+    }
+
+    widgets::Window::new(hash!(), vec2(130., 50.), vec2(290., 200.))
     .label("Grill Station")
     .titlebar(true)
     .ui(&mut *root_ui(), |ui| {
-        Group::new(hash!(), Vec2::new(290., 380.)).ui(ui, |ui| {
+        Group::new(hash!(), Vec2::new(280., 300.)).ui(ui, |ui| {
             grill_station.display(ui);
+        });
+    });
+
+    widgets::Window::new(hash!(), vec2(130., 340.), vec2(290., 200.))
+    .label("Fry Station")
+    .titlebar(true)
+    .ui(&mut *root_ui(), |ui| {
+        Group::new(hash!(), Vec2::new(280., 300.)).ui(ui, |ui| {
+            fry_station.display(ui);
+        });
+    });
+
+    widgets::Window::new(hash!(), vec2(160., 600.), vec2(290., 150.))
+    .label("Drink Station")
+    .titlebar(true)
+    .ui(&mut *root_ui(), |ui| {
+        Group::new(hash!(), Vec2::new(280., 300.)).ui(ui, |ui| {
+            drink_station.display(ui);
         });
     });
                 

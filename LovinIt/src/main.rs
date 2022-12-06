@@ -44,6 +44,7 @@ pub struct Item {
     str_name: String,
     number: i32,
     cooking_time: i32,
+    assembly_time: i32,
     ingredients: Vec<String>,
     starting_station: String,
     order_num: i32,
@@ -78,6 +79,19 @@ impl Item {
             str_name:item_type.to_string(),
             number:1,
             cooking_time:match item_type{
+                "Hamburger"=>1000,
+                "Cheeseburger"=>1000,
+                "Double Hamburger"=>1500,
+                "Double Cheeseburger"=>1500,
+                "McDouble"=>900,
+                "Big Mac"=>1200,
+                "Quarter Pounder"=>1500,
+                "Quarter Pounder with Cheese"=>1600,
+                "Double Quarter Pounder"=>1700,
+                "Double Quarter Pounder with Cheese"=>1900,
+                _=> 500
+            },
+            assembly_time:match item_type{
                 "Hamburger"=>1000,
                 "Cheeseburger"=>1000,
                 "Double Hamburger"=>1500,
@@ -891,8 +905,11 @@ loop {
             order.inventory(ui);
             if ui.button(Vec2::new(102., order.inventory.len() as f32 * 52.0 + 10 as f32), "Place Order") {
                 println!("Order Placed!");
-                //cache order
+
+                //cache orders according to stations
                 //orders.push(order.clone());
+                assembly_orders.push(order.clone());
+
                 for item in order.clone().inventory { //add to grilling station queue
                     let final_item = item.clone();
                     if final_item.starting_station == "grill" {
@@ -933,8 +950,57 @@ loop {
     let txd = tx.clone(); //drink
     let txa = tx.clone(); //assembly
     let received = rx.try_iter().next();
+    let received_assembly = received.clone();
+
+    let mut assembly_ready = true;
+    for i in 0..assembly_orders.clone().len() {
+        let placed_order = &assembly_orders.clone()[i];
+        let placed_order_num = placed_order.inventory[0].order_num;
+
+        //check if order is still getting ready at grill
+        for grill_order in &grill_orders.clone() {
+            let num = grill_order.inventory[0].order_num;
+            if num == placed_order_num {
+                assembly_ready = false;
+                break;
+            }
+        }
+        //check if order still getting ready at fry
+        if assembly_ready {
+            for fry_order in &fry_orders.clone() {
+                let num = fry_order.inventory[0].order_num;
+                if num == placed_order_num {
+                    assembly_ready = false;
+                    break;
+                }
+            }
+        }
+        //check if order still getting ready at drink
+        if assembly_ready {
+            for drink_order in &drink_orders.clone() {
+                let num = drink_order.inventory[0].order_num;
+                if num == placed_order_num {
+                    assembly_ready = false;
+                    break;
+                }
+            }
+        }
+
+        if (assembly_ready) {
+            println!("{:?} is ready!!!!!", placed_order_num);
+            assembly_orders.drain(i..(i + 1));
+            break;
+        }
+    }
+
     let received_grill1 = received.clone();
     let received_grill2 = received.clone();
+    let received_grill3 = received.clone();
+
+    //check if order has been completed
+    if (!received_grill3.is_none() && received_grill3.unwrap() == "grill") {
+        grill_orders.drain(0..1);
+    }
 
     //all grill orders have been processed    
     if grill_orders.len() == 0 && (!received_grill1.is_none() && received_grill1.unwrap() == "grill") {
@@ -945,9 +1011,9 @@ loop {
     //there are grill orders ready to process and no grill orders running in background
     if grill_orders.clone().len() > 0 && (grill_empty || (!received_grill2.is_none() && received_grill2.unwrap() == "grill")) { 
         grill_station.queue.clear();
-        grill_empty = false;
         let placed_order = grill_orders[0].clone().inventory; //get order
-        grill_orders.drain(0..1);
+
+        grill_empty = false;
 
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
@@ -955,7 +1021,6 @@ loop {
                 grill_station.queue.push(final_item);
             }
         }
-
         let mut y = grill_station.clone();
         let item_cooking = thread::spawn(move || {
             y.cook();
@@ -964,6 +1029,8 @@ loop {
                 txg.send(val).unwrap();
             }
         });
+
+        
     }
 
 
@@ -1035,7 +1102,7 @@ loop {
     .label("Grill Station")
     .titlebar(true)
     .ui(&mut *root_ui(), |ui| {
-        Group::new(hash!(), Vec2::new(280., 300.)).ui(ui, |ui| {
+        Group::new(hash!(), Vec2::new(280., 180.)).ui(ui, |ui| {
             grill_station.display(ui);
         });
     });
@@ -1044,7 +1111,7 @@ loop {
     .label("Fry Station")
     .titlebar(true)
     .ui(&mut *root_ui(), |ui| {
-        Group::new(hash!(), Vec2::new(280., 300.)).ui(ui, |ui| {
+        Group::new(hash!(), Vec2::new(280., 180.)).ui(ui, |ui| {
             fry_station.display(ui);
         });
     });
@@ -1053,7 +1120,7 @@ loop {
     .label("Drink Station")
     .titlebar(true)
     .ui(&mut *root_ui(), |ui| {
-        Group::new(hash!(), Vec2::new(280., 300.)).ui(ui, |ui| {
+        Group::new(hash!(), Vec2::new(280., 140.)).ui(ui, |ui| {
             drink_station.display(ui);
         });
     });

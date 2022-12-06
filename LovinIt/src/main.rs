@@ -174,7 +174,9 @@ impl GrillStation {
     fn display(&mut self, ui: &mut Ui) {
         for (n, item) in self.queue.clone().iter().enumerate() {
             let mut label = (&item.str_name).to_owned();
-            label.push_str("   ");
+            label.push_str(" (");
+            label.push_str(&item.number.to_string());
+            label.push_str(") - ");
             label.push_str(&item.order_num.to_string());
             let drag = Group::new(hash!("grill station", n), Vec2::new(270., 50.)) //width, height
                 .draggable(true)
@@ -205,7 +207,9 @@ impl FryStation {
     fn display(&mut self, ui: &mut Ui) {
         for (n, item) in self.queue.clone().iter().enumerate() {
             let mut label = (&item.str_name).to_owned();
-            label.push_str("   ");
+            label.push_str(" (");
+            label.push_str(&item.number.to_string());
+            label.push_str(") - ");
             label.push_str(&item.order_num.to_string());
             let drag = Group::new(hash!("fry station", n), Vec2::new(270., 50.)) //width, height
                 .draggable(true)
@@ -236,7 +240,9 @@ impl DrinkStation {
     fn display(&mut self, ui: &mut Ui) {
         for (n, item) in self.queue.clone().iter().enumerate() {
             let mut label = (&item.str_name).to_owned();
-            label.push_str("   ");
+            label.push_str(" (");
+            label.push_str(&item.number.to_string());
+            label.push_str(") - ");
             label.push_str(&item.order_num.to_string());
             let drag = Group::new(hash!("drink station", n), Vec2::new(270., 50.)) //width, height
                 .draggable(true)
@@ -989,7 +995,6 @@ loop {
 
         if (assembly_ready) {
             println!("{:?} is ready!!!!!", placed_order_num);
-            thread::sleep(time::Duration::from_millis(500)); //time to assemble
             assembly_orders.drain(i..(i + 1));
             break;
         }

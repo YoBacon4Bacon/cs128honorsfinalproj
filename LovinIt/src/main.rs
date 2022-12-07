@@ -372,12 +372,14 @@ fn window_conf() -> Conf {
     }
 }
 
+#[allow(dead_code)]
 fn ham_bot(x : f32, y : f32) {
     let burg = Color::from_rgba(244, 164, 96, 250);
     draw_circle(x, y, 26.0, burg);
     draw_circle(x + 5.5, y, 26.0, burg);
 }
 
+#[allow(dead_code)]
 fn ham_bun(x : f32, y : f32) {
     ham_bot(x, y);
 
@@ -416,6 +418,7 @@ fn ham_bun(x : f32, y : f32) {
     }
 }
 
+#[allow(dead_code)]
 async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
     let let_size = Vec2 {x: 50.0, y: 40.0};
     
@@ -431,6 +434,7 @@ async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
     );
 }
 
+#[allow(dead_code)]
 async fn tom(x : f32, y : f32, tom:Texture2D) {
     let tom_size = Vec2 {x: 40.0, y: 40.0};
     
@@ -446,6 +450,7 @@ async fn tom(x : f32, y : f32, tom:Texture2D) {
     );
 }
 
+#[allow(dead_code)]
 async fn fries(x : f32, y : f32, fries:Texture2D) {
     let fry_size = Vec2 {x: 50.0, y: 50.0};
 
@@ -461,6 +466,7 @@ async fn fries(x : f32, y : f32, fries:Texture2D) {
     );
 }
 
+#[allow(dead_code)]
 async fn cashier(x : f32, y : f32, cashier:Texture2D) {
     let cash_size = Vec2 {x: 90.0, y: 90.0};
 
@@ -476,22 +482,25 @@ async fn cashier(x : f32, y : f32, cashier:Texture2D) {
     );
 }
 
+#[allow(dead_code)]
 fn raw_meat(x : f32, y : f32) {
     let meat = Color::from_rgba(240, 128, 128, 225);
     //let cooked = Color::from_rgba(160, 82, 45, 225);
     draw_circle(x, y, 23.0, meat);
 }
 
+#[allow(dead_code)]
 fn cooked_meat(x : f32, y : f32) {
     let cooked = Color::from_rgba(160, 82, 45, 225);
     draw_circle(x + 2.5, y, 23.0, cooked);
     //draw_circle(504.0, 599.0, 23.0, RED);
 }
 
-fn boxes() {
+#[allow(dead_code)]
+async fn assembly_deco(lettuce_t:Texture2D, tom_t:Texture2D) {
     let grill = Color::from_rgba(220, 220, 220, 255);
-    draw_rectangle(1020.0, 30.0, 60.0, 60.0, grill);
-    draw_rectangle(1020.0, 105.0, 60.0, 60.0, grill);
+    //draw_rectangle(1020.0, 30.0, 60.0, 60.0, grill);
+    //draw_rectangle(1020.0, 105.0, 60.0, 60.0, grill);
     draw_rectangle(1020.0, 180.0, 60.0, 60.0, grill);
     draw_rectangle(1020.0, 255.0, 60.0, 60.0, grill);
     draw_rectangle(1020.0, 330.0, 60.0, 60.0, grill);
@@ -500,8 +509,43 @@ fn boxes() {
     draw_rectangle(795.0, 330.0, 60.0, 60.0, grill);
     draw_rectangle(720.0, 330.0, 60.0, 60.0, grill);
     draw_rectangle(620.0, 330.0, 85.0, 60.0, grill);
+    
+    let mac = Color::from_rgba(255, 228, 196, 255);
+    tom(678.0, 367.0, tom_t).await;
+    tom(660.0, 365.0, tom_t).await;
+    tom(640.0, 368.0, tom_t).await;
+    tom(643.0, 350.0, tom_t).await;
+    tom(680.0, 354.0, tom_t).await;
+    tom(654.0, 354.0, tom_t).await;
+    leaf(750.0, 352.0, lettuce_t).await;
+    leaf(745.0, 364.0, lettuce_t).await;
+    pickles(820.0, 350.0);
+    pickles(817.0, 365.0);
+    pickles(827.0, 360.0);
+    onions(912.0, 360.0);
+    onions(897.0, 352.0);
+    onions(888.0, 353.0);
+    onions(892.0, 367.0);
+    onions(910.0, 370.0);
+    cheese(967.0, 355.0);
+    cheese(980.0, 365.0);
+    ketchup(1044.0, 367.0);
+    ketchup(1055.0, 350.0);
+    draw_circle(1040.0, 344.0, 10.0, RED);
+    draw_circle(1033.0, 344.0, 10.0, RED);
+    draw_circle(1033.0, 353.0, 10.0, RED);
+    draw_circle(1065.0, 375.0, 10.0, RED);
+    mustard(1044.0, 293.0);
+    mustard(1055.0, 280.0);
+    draw_circle(1038.0, 280.0, 13.0, YELLOW);
+    draw_circle(1043.0, 273.0, 13.0, YELLOW);
+    big_mac_sauce(1045.0, 217.0);
+    big_mac_sauce(1052.0, 204.0);
+    draw_circle(1064.0, 220.0, 13.0, mac);
+    draw_circle(1040.0, 200.0, 13.0, mac);
 }
 
+#[allow(dead_code)]
 fn ketchup(x : f32, y : f32) {
     pub struct Offset {
         pub x_coord : f32,
@@ -520,6 +564,7 @@ fn ketchup(x : f32, y : f32) {
     }
 }
 
+#[allow(dead_code)]
 fn mustard(x : f32, y : f32) {
     pub struct Offset {
         pub x_coord : f32,
@@ -538,6 +583,28 @@ fn mustard(x : f32, y : f32) {
     }
 }
 
+#[allow(dead_code)]
+fn big_mac_sauce(x : f32, y : f32) {
+    pub struct Offset {
+        pub x_coord : f32,
+        pub y_coord : f32,
+        pub rad : f32,
+    }
+
+    let mac = Color::from_rgba(255, 228, 196, 255);
+
+    let vec : Vec<Offset> =  vec![Offset {x_coord : -11.5, y_coord : 1.0, rad : 10.0},
+                Offset {x_coord : -1.5, y_coord : 9.0, rad : 10.0},
+                Offset {x_coord : 8.5, y_coord : 6.0, rad : 13.0},
+                Offset {x_coord : -1.5, y_coord : -9.0, rad : 8.0},
+                Offset {x_coord : 11.5, y_coord : -9.0, rad : 10.0}];
+
+    for n in 0..5 {
+        draw_circle(vec[n].x_coord + x, vec[n].y_coord + y, vec[n].rad, mac);
+    }
+}
+
+#[allow(dead_code)]
 fn pickles(x : f32, y : f32) {
     pub struct Offset {
         pub x_coord : f32,
@@ -559,6 +626,7 @@ fn pickles(x : f32, y : f32) {
     }
 }
 
+#[allow(dead_code)]
 fn onions(x : f32, y : f32) {
     pub struct Offset {
         pub x_coord : f32,
@@ -578,11 +646,13 @@ fn onions(x : f32, y : f32) {
     }
 }
 
+#[allow(dead_code)]
 fn cheese(x : f32, y : f32) {
     let chee = Color::from_rgba(255, 215, 0, 255);
     draw_rectangle(x - 18.5, y - 19.0, 40.0, 40.0, chee);
 }
 
+#[allow(dead_code)]
 fn hamburger(x : f32, y : f32) {
     ham_bot(x - 1.5, y + 14.0);
     cooked_meat(x - 1.5, y + 11.6);
@@ -593,6 +663,7 @@ fn hamburger(x : f32, y : f32) {
     ham_bun(x - 1.5, y - 15.0);
 }
 
+#[allow(dead_code)]
 fn cheeseburger(x : f32, y : f32) {
     ham_bot(x - 1.5, y + 19.0);
     cooked_meat(x - 1.5, y + 16.6);
@@ -604,6 +675,7 @@ fn cheeseburger(x : f32, y : f32) {
     ham_bun(x - 1.5, y - 11.0);
 }
 
+#[allow(dead_code)]
 fn double_hamburger(x : f32, y : f32) {
     ham_bot(x - 3.0, y + 15.0);
     cooked_meat(x - 3.0, y + 13.0);
@@ -615,6 +687,7 @@ fn double_hamburger(x : f32, y : f32) {
     ham_bun(x - 3.0, y - 14.0);
 }
 
+#[allow(dead_code)]
 fn double_cheeseburger(x : f32, y : f32) {
     ham_bot(x - 3.0, y + 20.0);
     cooked_meat(x - 3.0, y + 18.0);
@@ -627,6 +700,7 @@ fn double_cheeseburger(x : f32, y : f32) {
     ham_bun(x - 3.0, y - 7.0);
 }
 
+#[allow(dead_code)]
 fn mcdouble(x : f32, y : f32) {
     ham_bot(x - 3.0, y + 20.0);
     cooked_meat(x - 3.0, y + 18.0);
@@ -639,6 +713,7 @@ fn mcdouble(x : f32, y : f32) {
     ham_bun(x - 3.0, y - 7.0);
 }
 
+#[allow(dead_code)]
 fn quarter_pounder(x : f32, y : f32) {
     ham_bot(x - 1.5, y + 14.0);
     cooked_meat(x - 1.5, y + 11.6);
@@ -649,6 +724,7 @@ fn quarter_pounder(x : f32, y : f32) {
     ham_bun(x - 1.5, y - 15.0);
 }
 
+#[allow(dead_code)]
 fn quarter_pounder_with_cheese(x : f32, y : f32) {
     ham_bot(x - 1.5, y + 19.0);
     cooked_meat(x - 1.5, y + 16.6);
@@ -660,6 +736,7 @@ fn quarter_pounder_with_cheese(x : f32, y : f32) {
     ham_bun(x - 1.5, y - 11.0);
 }
 
+#[allow(dead_code)]
 fn double_quarter_pounder(x : f32, y : f32) {
     ham_bot(x - 3.0, y + 15.0);
     cooked_meat(x - 3.0, y + 13.0);
@@ -671,6 +748,7 @@ fn double_quarter_pounder(x : f32, y : f32) {
     ham_bun(x - 3.0, y - 14.0);
 }
 
+#[allow(dead_code)]
 fn double_quarter_pounder_with_cheese(x : f32, y : f32) {
     ham_bot(x - 3.0, y + 20.0);
     cooked_meat(x - 3.0, y + 18.0);
@@ -853,21 +931,7 @@ loop {
     draw_rectangle(610.0, 400.0, 475.0, 65.0, counter);
     draw_rectangle(610.0, 325.0, 475.0, 75.0, counter);
     draw_rectangle(1010.0, 20.0, 75.0, 400.0, counter);
-    boxes();
-
-    // tom(30.0, 100.0, tom_t).await;
-    // leaf(280.0, 450.0, lettuce_t).await;
-    // fries(230.0, 123.0, fries_t).await;
-    
-    // hamburger(500.0, 700.0);
-    // cheeseburger(500.0, 400.0);
-    // mcdouble(500.0, 400.0);
-    // double_cheeseburger(500.0, 230.0);
-    // double_hamburger(100.0, 30.0);
-    // quarter_pounder(400.0, 40.0);
-    // double_quarter_pounder(100.0, 800.0);
-    // quarter_pounder_with_cheese(900.0, 200.0);
-    // double_quarter_pounder_with_cheese(700.0, 700.0);
+    assembly_deco(lettuce_t, tom_t).await;
 
     //partitions/walls
     draw_line(20.0, 300.0, 420.0, 300.0, 10.0, BLACK);

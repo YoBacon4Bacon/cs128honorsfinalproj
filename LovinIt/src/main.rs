@@ -451,22 +451,6 @@ async fn tom(x : f32, y : f32, tom:Texture2D) {
 }
 
 #[allow(dead_code)]
-async fn fries(x : f32, y : f32, fries:Texture2D) {
-    let fry_size = Vec2 {x: 50.0, y: 50.0};
-
-    draw_texture_ex(
-        fries,
-        x,
-        y,
-        WHITE,
-        DrawTextureParams {
-            dest_size: Some(fry_size),
-            ..Default::default()
-        },
-    );
-}
-
-#[allow(dead_code)]
 async fn cashier(x : f32, y : f32, cashier:Texture2D) {
     let cash_size = Vec2 {x: 90.0, y: 90.0};
 
@@ -766,6 +750,18 @@ fn bag(x : f32, y : f32) {
     draw_rectangle(x, y, 60., 90., Color::from_rgba(160, 82, 45, 255));
 }
 
+#[allow(dead_code)]
+fn fries() {
+    let fr = Color::from_rgba(245, 245, 220, 225);
+    draw_line(80.0, 340.0, 90.0, 355.0, 3.0, fr);
+    draw_line(55.0, 340.0, 35.0, 345.0, 3.0, fr);
+    draw_line(66.0, 350.0, 70.0, 365.0, 3.0, fr);
+    draw_line(40.0, 360.0, 55.0, 362.0, 3.0, fr);
+    draw_line(57.0, 370.0, 43.0, 380.0, 3.0, fr);
+    draw_line(70.0, 380.0, 86.0, 380.0, 3.0, fr);
+    draw_line(90.0, 360.0, 80.0, 375.0, 3.0, BLACK);
+}
+
 //#[macroquad::main("lovin_it")]
 #[macroquad::main(window_conf)]
 async fn main() {
@@ -789,7 +785,6 @@ async fn main() {
     
     let lettuce_t: Texture2D = load_texture("images/lettuce.png").await.unwrap();
     let tom_t: Texture2D = load_texture("images/tom.png").await.unwrap();
-    let fries_t: Texture2D = load_texture("images/fries.png").await.unwrap();
     let cashier_t: Texture2D = load_texture("images/register.png").await.unwrap();
     
     
@@ -897,7 +892,7 @@ loop {
     draw_rectangle_lines(30.0, 400.0, 70.0, 60.0, 5.0, GRAY); //nuggets fryer
     draw_rectangle_lines(100.0, 425.0, 30.0, 5.0, 5.0, GRAY); //nuggets fryer handle
 
-    //fries(30.0, 320.0).await;
+    fries();
 
     //drinks
     draw_rectangle(20.0, 580.0, 580.0, 300.0, WHITE);

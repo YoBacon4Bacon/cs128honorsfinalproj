@@ -883,7 +883,13 @@ loop {
     draw_rectangle(20.0, 300.0, 105.0, 300.0, counter);
     //draw_rectangle(20.0, 490.0, 400.0, 100.0, counter);
     draw_rectangle(20.0, 305.0, 90.0, 193.0, grill);
+    
     draw_rectangle(25.0, 310.0, 80.0, 180.0, oil);
+
+    draw_rectangle_lines(30.0, 330.0, 70.0, 60.0, 5.0, GRAY); //fries fryer
+    draw_rectangle_lines(100.0, 355.0, 30.0, 5.0, 5.0, GRAY); //fries fryer handle
+    draw_rectangle_lines(30.0, 400.0, 70.0, 60.0, 5.0, GRAY); //nuggets fryer
+    draw_rectangle_lines(100.0, 425.0, 30.0, 5.0, 5.0, GRAY); //nuggets fryer handle
 
     //fries(30.0, 320.0).await;
 

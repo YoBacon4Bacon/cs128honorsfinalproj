@@ -232,7 +232,7 @@ impl DrinkStation {
     }
     pub fn cook(&mut self){
         while self.queue.clone().len() > (0 as usize) {
-            let mut item = &mut self.queue[0];
+            let item = &mut self.queue[0];
             item.cook();
             self.queue.drain(0..1);
         }
@@ -293,7 +293,7 @@ impl Order {
             i += 1;
         }
     }
-    fn addItem(&mut self, order_number:i32, item_type:&str) {
+    fn add_item(&mut self, order_number:i32, item_type:&str) {
         let length: usize = self.inventory.clone().len();
         let mut duplicate_item: bool = false; 
         for i in 0..length {
@@ -379,22 +379,7 @@ async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
         },
     );
 }
-/*
-async fn tomato(x : f32, y : f32, tomato:Texture2D) {
-    let tomato_size = Vec2 {x: 50.0, y: 50.0};
 
-    draw_texture_ex(
-        tomato,
-        x,
-        y,
-        WHITE,
-        DrawTextureParams {
-            dest_size: Some(tomato_size),
-            ..Default::default()
-        },
-    );
-}
-*/
 async fn tom(x : f32, y : f32, tom:Texture2D) {
     let tom_size = Vec2 {x: 40.0, y: 40.0};
     
@@ -568,6 +553,85 @@ fn cheeseburger(x : f32, y : f32) {
     ham_bun(x - 1.5, y - 11.0);
 }
 
+fn double_hamburger(x : f32, y : f32) {
+    ham_bot(x - 3.0, y + 15.0);
+    cooked_meat(x - 3.0, y + 13.0);
+    ketchup(x - 3.0, y + 11.0);
+    pickles(x - 3.0, y + 9.0);
+    onions(x - 3.0, y + 7.0);
+    cooked_meat(x - 3.0, y);
+    mustard(x - 3.0, y - 3.0);
+    ham_bun(x - 3.0, y - 14.0);
+}
+
+fn double_cheeseburger(x : f32, y : f32) {
+    ham_bot(x - 3.0, y + 20.0);
+    cooked_meat(x - 3.0, y + 18.0);
+    cheese(x - 3.0, y + 16.6);
+    ketchup(x - 3.0, y + 15.0);
+    pickles(x - 3.0, y + 14.0);
+    onions(x - 3.0, y + 13.0);
+    mustard(x - 3.0, y + 8.0);
+    cheese(x - 3.0, y + 2.0);
+    ham_bun(x - 3.0, y - 7.0);
+}
+
+fn mcdouble(x : f32, y : f32) {
+    ham_bot(x - 3.0, y + 20.0);
+    cooked_meat(x - 3.0, y + 18.0);
+    cheese(x - 3.0, y + 16.6);
+    ketchup(x - 3.0, y + 15.0);
+    pickles(x - 3.0, y + 14.0);
+    onions(x - 3.0, y + 13.0);
+    mustard(x - 3.0, y + 8.0);
+    cooked_meat(x - 3.0, y + 2.0);
+    ham_bun(x - 3.0, y - 7.0);
+}
+
+fn quarter_pounder(x : f32, y : f32) {
+    ham_bot(x - 1.5, y + 14.0);
+    cooked_meat(x - 1.5, y + 11.6);
+    ketchup(x - 1.5, y + 9.5);
+    pickles(x - 1.5, y + 7.0);
+    onions(x - 1.5, y + 4.5);
+    mustard(x - 1.5, y - 2.5);
+    ham_bun(x - 1.5, y - 15.0);
+}
+
+fn quarter_pounder_with_cheese(x : f32, y : f32) {
+    ham_bot(x - 1.5, y + 19.0);
+    cooked_meat(x - 1.5, y + 16.6);
+    cheese(x - 1.5, y + 13.0);
+    ketchup(x - 1.5, y + 11.0);
+    pickles(x - 1.5, y + 8.0);
+    onions(x - 1.5, y + 5.0);
+    mustard(x - 1.5, y + 1.0);
+    ham_bun(x - 1.5, y - 11.0);
+}
+
+fn double_quarter_pounder(x : f32, y : f32) {
+    ham_bot(x - 3.0, y + 15.0);
+    cooked_meat(x - 3.0, y + 13.0);
+    ketchup(x - 3.0, y + 11.0);
+    pickles(x - 3.0, y + 9.0);
+    onions(x - 3.0, y + 7.0);
+    cooked_meat(x - 3.0, y);
+    mustard(x - 3.0, y - 3.0);
+    ham_bun(x - 3.0, y - 14.0);
+}
+
+fn double_quarter_pounder_with_cheese(x : f32, y : f32) {
+    ham_bot(x - 3.0, y + 20.0);
+    cooked_meat(x - 3.0, y + 18.0);
+    cheese(x - 3.0, y + 16.6);
+    ketchup(x - 3.0, y + 15.0);
+    pickles(x - 3.0, y + 14.0);
+    onions(x - 3.0, y + 13.0);
+    mustard(x - 3.0, y + 8.0);
+    cheese(x - 3.0, y + 2.0);
+    ham_bun(x - 3.0, y - 7.0);
+}
+
 //#[macroquad::main("lovin_it")]
 #[macroquad::main(window_conf)]
 async fn main() {
@@ -587,7 +651,6 @@ async fn main() {
     //adding image into program
     
     let lettuce_t: Texture2D = load_texture("images/lettuce.png").await.unwrap();
-    let tomato_t: Texture2D = load_texture("images/tomato.png").await.unwrap();
     let tom_t: Texture2D = load_texture("images/tom.png").await.unwrap();
     let fries_t: Texture2D = load_texture("images/fries.png").await.unwrap();
     let cashier_t: Texture2D = load_texture("images/register.png").await.unwrap();
@@ -740,9 +803,20 @@ loop {
     draw_rectangle(610.0, 325.0, 475.0, 75.0, counter);
     draw_rectangle(1010.0, 20.0, 75.0, 400.0, counter);
     boxes();
+
+    tom(30.0, 100.0, tom_t).await;
+    leaf(280.0, 450.0, lettuce_t).await;
+    fries(230.0, 123.0, fries_t).await;
     
     hamburger(500.0, 700.0);
     cheeseburger(500.0, 400.0);
+    mcdouble(500.0, 400.0);
+    double_cheeseburger(500.0, 230.0);
+    double_hamburger(100.0, 30.0);
+    quarter_pounder(400.0, 40.0);
+    double_quarter_pounder(100.0, 800.0);
+    quarter_pounder_with_cheese(900.0, 200.0);
+    double_quarter_pounder_with_cheese(700.0, 700.0);
 
     //partitions/walls
     draw_line(20.0, 300.0, 420.0, 300.0, 10.0, BLACK);
@@ -811,91 +885,91 @@ loop {
             ui.label(None, "Click to add to cart.");
             ui.tree_node(hash!(), "Burgers", |ui| {
                 if ui.button(None, "Hamburger") {
-                    order.addItem(order_number, "Hamburger");
+                    order.add_item(order_number, "Hamburger");
                 }
                 ui.separator();
                 if ui.button(None, "Cheeseburger") {
-                    order.addItem(order_number, "Cheeseburger");
+                    order.add_item(order_number, "Cheeseburger");
                 }
                 ui.separator();
                 if ui.button(None, "Double Hamburger") {
-                    order.addItem(order_number, "Double Hamburger");
+                    order.add_item(order_number, "Double Hamburger");
                 }
                 ui.separator();
                 if ui.button(None, "Double Cheeseburger") {
-                    order.addItem(order_number, "Double Cheeseburger");
+                    order.add_item(order_number, "Double Cheeseburger");
                 }
                 ui.separator();
                 if ui.button(None, "McDouble") {
-                    order.addItem(order_number, "McDouble");
+                    order.add_item(order_number, "McDouble");
                 }
                 ui.separator();
                 if ui.button(None, "Big Mac") {
-                    order.addItem(order_number, "Big Mac");
+                    order.add_item(order_number, "Big Mac");
                 }
                 ui.separator();
                 if ui.button(None, "Quarter Pounder") {
-                    order.addItem(order_number, "Quarter Pounder");
+                    order.add_item(order_number, "Quarter Pounder");
                 }
                 ui.separator();
                 if ui.button(None, "Quarter Pounder with Cheese") {
-                    order.addItem(order_number, "Quarter Pounder with Cheese");
+                    order.add_item(order_number, "Quarter Pounder with Cheese");
                 }
                 ui.separator();
                 if ui.button(None, "Double Quarter Pounder") {
-                    order.addItem(order_number, "Double Quarter Pounder");
+                    order.add_item(order_number, "Double Quarter Pounder");
                 }
                 ui.separator();
                 if ui.button(None, "Double Quarter Pounder with Cheese") {
-                    order.addItem(order_number, "Double Quarter Pounder with Cheese");
+                    order.add_item(order_number, "Double Quarter Pounder with Cheese");
                 }
                 ui.separator();
             });
             ui.tree_node(hash!(), "Sides", |ui| {
                 if ui.button(None, "Small Fry") {
-                    order.addItem(order_number, "Small Fry");
+                    order.add_item(order_number, "Small Fry");
                 }
                 ui.separator();
                 if ui.button(None, "Medium Fry") {
-                    order.addItem(order_number, "Medium Fry");
+                    order.add_item(order_number, "Medium Fry");
                 }
                 ui.separator();
                 if ui.button(None, "Large Fry") {
-                    order.addItem(order_number, "Large Fry");
+                    order.add_item(order_number, "Large Fry");
                 }
                 ui.separator();
                 if ui.button(None, "4 McNuggets") {
-                    order.addItem(order_number, "4 McNuggets");
+                    order.add_item(order_number, "4 McNuggets");
                 }
                 ui.separator();
                 if ui.button(None, "6 McNuggets") {
-                    order.addItem(order_number, "6 McNuggets");
+                    order.add_item(order_number, "6 McNuggets");
                 }
                 ui.separator();
                 if ui.button(None, "10 McNuggets") {
-                    order.addItem(order_number, "10 McNuggets");
+                    order.add_item(order_number, "10 McNuggets");
                 }
                 ui.separator();
                 if ui.button(None, "20 McNuggets") {
-                    order.addItem(order_number, "20 McNuggets");
+                    order.add_item(order_number, "20 McNuggets");
                 }
                 ui.separator();
             });
             ui.tree_node(hash!(), "Drinks", |ui| {
                 if ui.button(None, "Regular Coffee") {
-                    order.addItem(order_number, "Regular Coffee");
+                    order.add_item(order_number, "Regular Coffee");
                 }
                 ui.separator();
                 if ui.button(None, "Regular Tea") {
-                    order.addItem(order_number, "Regular Tea");
+                    order.add_item(order_number, "Regular Tea");
                 }
                 ui.separator();
                 if ui.button(None, "Regular Smoothie") {
-                    order.addItem(order_number, "Regular Smoothie");
+                    order.add_item(order_number, "Regular Smoothie");
                 }
                 ui.separator();
                 if ui.button(None, "Regular Soda") {
-                    order.addItem(order_number, "Regular Soda");
+                    order.add_item(order_number, "Regular Soda");
                 }
             });
         });

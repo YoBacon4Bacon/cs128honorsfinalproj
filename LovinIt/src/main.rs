@@ -81,7 +81,7 @@ impl Item {
             str_name:item_type.to_string(),
             number:1,
             cooking_time:match item_type{
-                "Hamburger"=>3000,
+                "Hamburger"=>1500,
                 "Cheeseburger"=>1000,
                 "Double Hamburger"=>1500,
                 "Double Cheeseburger"=>1500,
@@ -94,16 +94,16 @@ impl Item {
                 _=> 500
             },
             assembly_time:match item_type{
-                "Hamburger"=>500,
-                "Cheeseburger"=>500,
-                "Double Hamburger"=>500,
-                "Double Cheeseburger"=>500,
-                "McDouble"=>500,
-                "Big Mac"=>500,
-                "Quarter Pounder"=>500,
-                "Quarter Pounder with Cheese"=>500,
-                "Double Quarter Pounder"=>500,
-                "Double Quarter Pounder with Cheese"=>500,
+                "Hamburger"=>1500,
+                "Cheeseburger"=>1000,
+                "Double Hamburger"=>1500,
+                "Double Cheeseburger"=>1500,
+                "McDouble"=>900,
+                "Big Mac"=>1200,
+                "Quarter Pounder"=>1500,
+                "Quarter Pounder with Cheese"=>1600,
+                "Double Quarter Pounder"=>1700,
+                "Double Quarter Pounder with Cheese"=>1900,
                 _=> 500
             },
             ingredients:match item_type{
@@ -291,6 +291,27 @@ impl AssemblyStation {
                 .ui(ui, |ui| {
                     ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
                 });
+        }
+    }
+    fn draw_items(&mut self) {
+        let mut num_items: f32 = 0.;
+        for item in self.queue.clone() {
+            let item_name = item.str_name.as_str();
+        
+            match item_name{
+                "Hamburger"=>hamburger(650. + (num_items * 70.), 270.),
+                "Cheeseburger"=>cheeseburger(650. + (num_items * 70.), 270.),
+                "Double Hamburger"=>double_hamburger(650. + (num_items * 70.), 270.),
+                "Double Cheeseburger"=>double_cheeseburger(650. + (num_items * 70.), 270.),
+                "McDouble"=>mcdouble(650. + (num_items * 70.), 270.),
+                "Big Mac"=>mcdouble(650. + (num_items * 70.), 270.),
+                "Quarter Pounder"=>quarter_pounder(650. + (num_items * 70.), 270.),
+                "Quarter Pounder with Cheese"=>quarter_pounder_with_cheese(650. + (num_items * 70.), 270.),
+                "Double Quarter Pounder"=>double_quarter_pounder(650. + (num_items * 70.), 270.),
+                "Double Quarter Pounder with Cheese"=>double_quarter_pounder_with_cheese(650. + (num_items * 70.), 270.),
+                _=> raw_meat(500., 270.)
+            }
+            num_items += 1.;
         }
     }
 }
@@ -1287,6 +1308,10 @@ loop {
 
     if !grill_empty {
         cooked_meat(68.0, 100.);
+    }
+
+    if !assembly_empty {
+        assembly_station.draw_items();
     }
 
         next_frame().await

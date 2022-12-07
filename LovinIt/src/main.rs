@@ -175,7 +175,7 @@ impl GrillStation {
     }
     pub fn cook(&mut self){
         while self.queue.clone().len() > (0 as usize) {
-            let mut item = &mut self.queue[0];
+            let item = &mut self.queue[0];
             item.cook();
             self.queue.drain(0..1);
         }
@@ -208,7 +208,7 @@ impl FryStation {
     }
     pub fn cook(&mut self){
         while self.queue.clone().len() > (0 as usize) {
-            let mut item = &mut self.queue[0];
+            let item = &mut self.queue[0];
             item.cook();
             self.queue.drain(0..1);
         }
@@ -800,7 +800,7 @@ async fn main() {
     // let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
     // let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
     // let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
-    let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
+    // let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
     
     
     let mut order = Order::new();
@@ -891,7 +891,7 @@ loop {
     draw_rectangle_lines(100.0, 355.0, 30.0, 5.0, 5.0, GRAY); //fries fryer handle
     draw_rectangle_lines(30.0, 400.0, 70.0, 60.0, 5.0, GRAY); //nuggets fryer
     draw_rectangle_lines(100.0, 425.0, 30.0, 5.0, 5.0, GRAY); //nuggets fryer handle
-
+    //bad
     fries();
 
     //drinks
@@ -993,16 +993,16 @@ loop {
         //         ..Default::default()
         //     },
         // );
-        draw_texture_ex(
-            worker5,
-            800.0,
-            575.0,
-            WHITE,
-            DrawTextureParams {
-                dest_size: None,
-                ..Default::default()
-            },
-        );
+        // draw_texture_ex(
+        //     worker5,
+        //     800.0,
+        //     575.0,
+        //     WHITE,
+        //     DrawTextureParams {
+        //         dest_size: None,
+        //         ..Default::default()
+        //     },
+        // );
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {
@@ -1201,7 +1201,7 @@ loop {
             }
         }
 
-        if (assembly_ready) {
+        if assembly_ready {
             assembly_orders.push(order_ready.clone());
             orders.drain(i..(i + 1));
         }
@@ -1211,7 +1211,7 @@ loop {
     let received_assembly2 = received.clone();
     let received_assembly3 = received.clone();
     //check if order has been assembled
-    if (!received_assembly1.is_none() && received_assembly1.unwrap() == "assembly") {
+    if !received_assembly1.is_none() && received_assembly1.unwrap() == "assembly" {
         order_ready = true;
         order_ready_num = assembly_orders[0].inventory[0].order_num;
         assembly_orders.drain(0..1);
@@ -1246,7 +1246,7 @@ loop {
     let received_grill3 = received.clone();
 
     //check if order has been completed
-    if (!received_grill3.is_none() && received_grill3.unwrap() == "grill") {
+    if !received_grill3.is_none() && received_grill3.unwrap() == "grill" {
         grill_orders.drain(0..1);
     }
 
@@ -1284,7 +1284,7 @@ loop {
     let received_fry3 = received.clone();  
 
     //check if order has been completed
-    if (!received_fry3.is_none() && received_fry3.unwrap() == "fry") {
+    if !received_fry3.is_none() && received_fry3.unwrap() == "fry" {
         fry_orders.drain(0..1);
     }
 
@@ -1322,7 +1322,7 @@ loop {
     let received_drink3 = received.clone();  
 
     //check if order has been completed
-    if (!received_drink3.is_none() && received_drink3.unwrap() == "drink") {
+    if !received_drink3.is_none() && received_drink3.unwrap() == "drink" {
         drink_orders.drain(0..1);
     }
 
@@ -1401,7 +1401,7 @@ loop {
     let txb = tx.clone();
     let received_bag = received.clone();
 
-    if (!received_bag.is_none() && received_bag.unwrap() == "done") {
+    if !received_bag.is_none() && received_bag.unwrap() == "done" {
         order_ready = false;
     }
 

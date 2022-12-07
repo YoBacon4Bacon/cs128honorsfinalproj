@@ -1068,6 +1068,13 @@ loop {
         }
 
         if (assembly_ready) {
+            for i in 0..placed_order.inventory.clone().len(){
+                println!("assembly start");
+                for j in 0..placed_order.inventory[i].number {
+                    thread::sleep(time::Duration::from_millis(placed_order.inventory[i].assembly_time as u64)); //time to assemble
+                }
+                println!("done");
+            }
             println!("{:?} is ready!!!!!", placed_order_num);
             assembly_orders.drain(i..(i + 1));
             break;

@@ -4,6 +4,8 @@ use std::thread;
 use std::thread::JoinHandle;
 use std::time;
 use std::sync::mpsc;
+use std::time::Instant;
+use std::time::Duration;
 
 
 use macroquad::ui::{
@@ -79,7 +81,7 @@ impl Item {
             str_name:item_type.to_string(),
             number:1,
             cooking_time:match item_type{
-                "Hamburger"=>1000,
+                "Hamburger"=>3000,
                 "Cheeseburger"=>1000,
                 "Double Hamburger"=>1500,
                 "Double Cheeseburger"=>1500,
@@ -148,7 +150,7 @@ impl Item {
     pub fn cook(&mut self){
         for i in 0..self.clone().number{
             println!("{} started cooking - {}",self.clone().str_name, self.clone().order_num.to_string());
-            thread::sleep(time::Duration::from_millis(self.clone().cooking_time as u64)); //time to cook
+            thread::sleep(time::Duration::from_millis(self.clone().cooking_time as u64));
             println!("{} finished cooking",self.clone().str_name);
         }
     }
@@ -832,19 +834,19 @@ loop {
     draw_rectangle(1010.0, 20.0, 75.0, 400.0, counter);
     boxes();
 
-    tom(30.0, 100.0, tom_t).await;
-    leaf(280.0, 450.0, lettuce_t).await;
-    fries(230.0, 123.0, fries_t).await;
+    // tom(30.0, 100.0, tom_t).await;
+    // leaf(280.0, 450.0, lettuce_t).await;
+    // fries(230.0, 123.0, fries_t).await;
     
-    hamburger(500.0, 700.0);
-    cheeseburger(500.0, 400.0);
-    mcdouble(500.0, 400.0);
-    double_cheeseburger(500.0, 230.0);
-    double_hamburger(100.0, 30.0);
-    quarter_pounder(400.0, 40.0);
-    double_quarter_pounder(100.0, 800.0);
-    quarter_pounder_with_cheese(900.0, 200.0);
-    double_quarter_pounder_with_cheese(700.0, 700.0);
+    // hamburger(500.0, 700.0);
+    // cheeseburger(500.0, 400.0);
+    // mcdouble(500.0, 400.0);
+    // double_cheeseburger(500.0, 230.0);
+    // double_hamburger(100.0, 30.0);
+    // quarter_pounder(400.0, 40.0);
+    // double_quarter_pounder(100.0, 800.0);
+    // quarter_pounder_with_cheese(900.0, 200.0);
+    // double_quarter_pounder_with_cheese(700.0, 700.0);
 
     //partitions/walls
     draw_line(20.0, 300.0, 420.0, 300.0, 10.0, BLACK);
@@ -1061,9 +1063,10 @@ loop {
 
     let mut assembly_ready = true;
     //find all orders ready for assembly
-    for i in 0..orders.clone().len() {
+    let orders_cloned = orders.clone();
+    for i in 0..orders_cloned.len() {
         assembly_ready = true;
-        let order_ready = &orders.clone()[i];
+        let order_ready = &orders_cloned[i];
         let order_ready_num = order_ready.inventory[0].order_num;
 
         //check if order is still getting ready at grill
@@ -1281,6 +1284,11 @@ loop {
             assembly_station.display(ui);
         });
     });
+
+    if !grill_empty {
+        cooked_meat(68.0, 100.);
+    }
+
         next_frame().await
     }
 }

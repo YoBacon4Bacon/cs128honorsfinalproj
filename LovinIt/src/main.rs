@@ -799,7 +799,7 @@ async fn main() {
     // let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
     // let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
     // let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
-    // let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
+    let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
     
     
     let mut order = Order::new();
@@ -986,16 +986,16 @@ loop {
         //         ..Default::default()
         //     },
         // );
-        // draw_texture_ex(
-        //     worker5,
-        //     800.0,
-        //     575.0,
-        //     WHITE,
-        //     DrawTextureParams {
-        //         dest_size: None,
-        //         ..Default::default()
-        //     },
-        // );
+        draw_texture_ex(
+            worker5,
+            800.0,
+            575.0,
+            WHITE,
+            DrawTextureParams {
+                dest_size: None,
+                ..Default::default()
+            },
+        );
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {

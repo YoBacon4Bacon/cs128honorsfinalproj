@@ -1088,6 +1088,9 @@ loop {
     for i in 0..orders_cloned.len() {
         assembly_ready = true;
         let order_ready = &orders_cloned[i];
+        if order_ready.inventory.len()==0{
+            break;
+        }
         let order_ready_num = order_ready.inventory[0].order_num;
 
         //check if order is still getting ready at grill
@@ -1177,7 +1180,6 @@ loop {
         grill_station.queue.clear();
         let placed_order = grill_orders[0].clone().inventory; //get order
         grill_empty = false;
-
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
             if final_item.starting_station == "grill" {

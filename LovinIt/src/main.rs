@@ -696,6 +696,8 @@ async fn main() {
     let mut drink_empty = true;
     let mut assembly_empty = true;
 
+    let mut order_ready = false;
+
     let mut order_number: i32 = 1;
     let mut grill_station = GrillStation::new();
     let mut pog_bar_g : i32 = 0;
@@ -1057,34 +1059,42 @@ loop {
 
                 //cache orders according to stations
                 //orders.push(order.clone());
-                orders.push(order.clone());
 
-                for item in order.clone().inventory { //add to grilling station queue
-                    let final_item = item.clone();
-                    if final_item.starting_station == "grill" {
-                        grill_orders.push(order.clone());
-                        break;
+                if order.inventory.len() != 0 {
+                    orders.push(order.clone());
+
+                    for item in order.clone().inventory { //add to grilling station queue
+                        let final_item = item.clone();
+                        if final_item.starting_station == "grill" {
+                            grill_orders.push(order.clone());
+                            break;
+                        }
                     }
-                }
 
-                for item in order.clone().inventory { //add to grilling station queue
-                    let final_item = item.clone();
-                    if final_item.starting_station == "fry" {
-                        fry_orders.push(order.clone());
-                        break;
+                    for item in order.clone().inventory { //add to grilling station queue
+                        let final_item = item.clone();
+                        if final_item.starting_station == "fry" {
+                            fry_orders.push(order.clone());
+                            break;
+                        }
                     }
-                }
 
-                for item in order.clone().inventory { //add to grilling station queue
-                    let final_item = item.clone();
-                    if final_item.starting_station == "drink" {
-                        drink_orders.push(order.clone());
-                        break;
+                    for item in order.clone().inventory { //add to grilling station queue
+                        let final_item = item.clone();
+                        if final_item.starting_station == "drink" {
+                            drink_orders.push(order.clone());
+                            break;
+                        }
                     }
-                }
 
+<<<<<<< HEAD
                 order.clear();
                 order_number += 1;
+=======
+                    order.clear();
+                    order_number += 1;
+
+>>>>>>> e8236710332c3931e433ca687d9ae438d0dca966
                 }
             }
         });
@@ -1109,9 +1119,11 @@ loop {
         println!("{}",i);
         assembly_ready = true;
         let order_ready = &orders_cloned[i];
-        if order_ready.inventory.len()==0{
+
+        if order_ready.inventory.len() == 0 {
             break;
         }
+
         let order_ready_num = order_ready.inventory[0].order_num;
 
         //check if order is still getting ready at grill
@@ -1155,6 +1167,7 @@ loop {
     //check if order has been assembled
     if (!received_assembly1.is_none() && received_assembly1.unwrap() == "assembly") {
         assembly_orders.drain(0..1);
+        order_ready = true;
     }
     //all orders in assembly queue have been assembled  
     if assembly_orders.len() == 0 && (!received_assembly2.is_none() && received_assembly2.unwrap() == "assembly") {
@@ -1201,7 +1214,11 @@ loop {
         grill_station.queue.clear();
         let placed_order = grill_orders[0].clone().inventory; //get order
         grill_empty = false;
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> e8236710332c3931e433ca687d9ae438d0dca966
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
             if final_item.starting_station == "grill" {
@@ -1338,6 +1355,22 @@ loop {
 
     if !assembly_empty {
         assembly_station.draw_items();
+    }
+
+    let txb = tx.clone();
+    let received_bag = received.clone();
+
+    if (!received_bag.is_none() && received_bag.unwrap() == "done") {
+        order_ready = false;
+    }
+
+    if order_ready {
+        cooked_meat(650., 450.);
+        let show_bag = thread::spawn(move || {
+            thread::sleep(time::Duration::from_millis(3000));
+            let val = String::from("done");
+            txb.send(val).unwrap();
+        });
     }
 
         next_frame().await

@@ -761,6 +761,11 @@ fn double_quarter_pounder_with_cheese(x : f32, y : f32) {
     ham_bun(x - 3.0, y - 7.0);
 }
 
+#[allow(dead_code)]
+fn bag(x : f32, y : f32) {
+    draw_rectangle(x, y, 60., 90., BROWN);
+}
+
 //#[macroquad::main("lovin_it")]
 #[macroquad::main(window_conf)]
 async fn main() {
@@ -772,6 +777,7 @@ async fn main() {
     let mut assembly_empty = true;
 
     let mut order_ready = false;
+    let mut order_ready_num = 1;
 
     let mut order_number: i32 = 1;
     let mut grill_station = GrillStation::new();
@@ -1211,8 +1217,9 @@ loop {
     let received_assembly3 = received.clone();
     //check if order has been assembled
     if (!received_assembly1.is_none() && received_assembly1.unwrap() == "assembly") {
-        assembly_orders.drain(0..1);
         order_ready = true;
+        order_ready_num = assembly_orders[0].inventory[0].order_num;
+        assembly_orders.drain(0..1);
     }
     //all orders in assembly queue have been assembled  
     if assembly_orders.len() == 0 && (!received_assembly2.is_none() && received_assembly2.unwrap() == "assembly") {
@@ -1404,7 +1411,8 @@ loop {
     }
 
     if order_ready {
-        cooked_meat(650., 450.);
+        bag(650., 420.);
+        draw_text(&order_ready_num.to_string(), 670.0, 460.0, 25.0, BLACK);
         let show_bag = thread::spawn(move || {
             thread::sleep(time::Duration::from_millis(3000));
             let val = String::from("done");

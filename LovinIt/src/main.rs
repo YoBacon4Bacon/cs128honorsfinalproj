@@ -152,6 +152,13 @@ impl Item {
             println!("{} finished cooking",self.clone().str_name);
         }
     }
+    pub fn assemble(&mut self){
+        for i in 0..self.clone().number{
+            println!("{} is being assembled - {}",self.clone().str_name, self.clone().order_num.to_string());
+            thread::sleep(time::Duration::from_millis(self.clone().assembly_time as u64)); //time to cook
+            println!("{} finished being assembled",self.clone().str_name);
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -261,6 +268,27 @@ impl AssemblyStation {
     pub fn new() -> AssemblyStation {
         AssemblyStation {
             queue: vec![],
+        }
+    }
+    pub fn assemble(&mut self){
+        while self.queue.clone().len() > (0 as usize) {
+            let item = &mut self.queue[0];
+            item.assemble();
+            self.queue.drain(0..1);
+        }
+    }
+    fn display(&mut self, ui: &mut Ui) {
+        for (n, item) in self.queue.clone().iter().enumerate() {
+            let mut label = (&item.str_name).to_owned();
+            label.push_str(" (");
+            label.push_str(&item.number.to_string());
+            label.push_str(") - ");
+            label.push_str(&item.order_num.to_string());
+            let drag = Group::new(hash!("assembly station", n), Vec2::new(270., 50.)) //width, height
+                .draggable(true)
+                .ui(ui, |ui| {
+                    ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
+                });
         }
     }
 }
@@ -988,7 +1016,7 @@ loop {
 
                 //cache orders according to stations
                 //orders.push(order.clone());
-                assembly_orders.push(order.clone());
+                orders.push(order.clone());
 
                 for item in order.clone().inventory { //add to grilling station queue
                     let final_item = item.clone();
@@ -1030,18 +1058,18 @@ loop {
     let txd = tx.clone(); //drink
     let txa = tx.clone(); //assembly
     let received = rx.try_iter().next();
-    let received_assembly = received.clone();
 
     let mut assembly_ready = true;
-    for i in 0..assembly_orders.clone().len() {
+    //find all orders ready for assembly
+    for i in 0..orders.clone().len() {
         assembly_ready = true;
-        let placed_order = &assembly_orders.clone()[i];
-        let placed_order_num = placed_order.inventory[0].order_num;
+        let order_ready = &orders.clone()[i];
+        let order_ready_num = order_ready.inventory[0].order_num;
 
         //check if order is still getting ready at grill
         for grill_order in &grill_orders.clone() {
             let num = grill_order.inventory[0].order_num;
-            if num == placed_order_num {
+            if num == order_ready_num {
                 assembly_ready = false;
                 break;
             }
@@ -1050,7 +1078,7 @@ loop {
         if assembly_ready {
             for fry_order in &fry_orders.clone() {
                 let num = fry_order.inventory[0].order_num;
-                if num == placed_order_num {
+                if num == order_ready_num {
                     assembly_ready = false;
                     break;
                 }
@@ -1060,7 +1088,7 @@ loop {
         if assembly_ready {
             for drink_order in &drink_orders.clone() {
                 let num = drink_order.inventory[0].order_num;
-                if num == placed_order_num {
+                if num == order_ready_num {
                     assembly_ready = false;
                     break;
                 }
@@ -1068,17 +1096,41 @@ loop {
         }
 
         if (assembly_ready) {
-            for i in 0..placed_order.inventory.clone().len(){
-                println!("assembly start");
-                for j in 0..placed_order.inventory[i].number {
-                    thread::sleep(time::Duration::from_millis(placed_order.inventory[i].assembly_time as u64)); //time to assemble
-                }
-                println!("done");
-            }
-            println!("{:?} is ready!!!!!", placed_order_num);
-            assembly_orders.drain(i..(i + 1));
-            break;
+            assembly_orders.push(order_ready.clone());
+            orders.drain(i..(i + 1));
         }
+    }
+
+    let received_assembly1 = received.clone();
+    let received_assembly2 = received.clone();
+    let received_assembly3 = received.clone();
+    //check if order has been assembled
+    if (!received_assembly1.is_none() && received_assembly1.unwrap() == "assembly") {
+        assembly_orders.drain(0..1);
+    }
+    //all orders in assembly queue have been assembled  
+    if assembly_orders.len() == 0 && (!received_assembly2.is_none() && received_assembly2.unwrap() == "assembly") {
+        assembly_station.queue.clear();
+        assembly_empty = true;
+    }
+    //there are assembly orders ready to process and no assembly orders running in background
+    if assembly_orders.clone().len() > 0 && (assembly_empty || (!received_assembly3.is_none() && received_assembly3.unwrap() == "assembly")) { 
+        assembly_station.queue.clear();
+        let placed_order = assembly_orders[0].clone().inventory; //get order
+        assembly_empty = false;
+
+        for item in placed_order { //add to grilling station queue
+            let final_item = item.clone();
+            assembly_station.queue.push(final_item);
+        }
+        let mut y = assembly_station.clone();
+        let item_cooking = thread::spawn(move || {
+            y.assemble();
+            if y.queue.clone().len() == (0 as usize) {
+                let val = String::from("assembly");
+                txa.send(val).unwrap();
+            }
+        });
     }
 
     let received_grill1 = received.clone();
@@ -1226,17 +1278,9 @@ loop {
     .titlebar(true)
     .ui(&mut *root_ui(), |ui| {
         Group::new(hash!(), Vec2::new(280., 140.)).ui(ui, |ui| {
-            for (n, placed_order) in assembly_orders.clone().iter().enumerate() {
-                let mut label = "Order ".to_owned();
-                label.push_str(&placed_order.inventory[0].order_num.to_string());
-                let drag = Group::new(hash!("assembly station", n), Vec2::new(270., 50.)) //width, height
-                    .draggable(true)
-                    .ui(ui, |ui| {
-                        ui.label(Vec2::new(5., 10.), &label); //left padding, upper padding
-                    });
-            }
+            assembly_station.display(ui);
         });
-    });    
+    });
         next_frame().await
     }
 }

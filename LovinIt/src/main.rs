@@ -964,7 +964,7 @@ loop {
     draw_rectangle(610.0, 20.0, 475.0, 510.0, WHITE);
     draw_rectangle(610.0, 20.0, 475.0, 510.0, assembly_floor);
     
-    draw_text("Assembly", 650.0, 60.0, 25.0, BLACK);
+    draw_text("Assembly", 650.0, 40.0, 25.0, BLACK);
 
     //decorations
     draw_rectangle(610.0, 400.0, 475.0, 65.0, counter);
@@ -979,10 +979,10 @@ loop {
     draw_line(600.0, 575.0, 600.0, 880.0, 10.0, BLACK);
 
     //progress bars
-    draw_rectangle_lines(130.0, 25.0, 200.0, 20.0, 5.0, GRAY);
+    draw_rectangle_lines(130.0, 25.0, 200.0, 20.0, 5.0, GRAY); //grill
     draw_rectangle_lines(130.0, 310.0, 200.0, 20.0, 5.0, GRAY);
     draw_rectangle_lines(130.0, 600.0, 200.0, 20.0, 5.0, GRAY);
-    draw_rectangle_lines(740.0, 45.0, 200.0, 20.0, 5.0, GRAY);
+    draw_rectangle_lines(740.0, 25.0, 200.0, 20.0, 5.0, GRAY); //assembly
 
     //drawing the image
     //texture methods for image manipulation
@@ -1447,7 +1447,7 @@ loop {
         });
     });
 
-    widgets::Window::new(hash!(), vec2(650., 70.), vec2(290., 150.))
+    widgets::Window::new(hash!(), vec2(650., 50.), vec2(290., 150.))
     .label("Assembly Station")
     .titlebar(true)
     .ui(&mut *root_ui(), |ui| {
@@ -1489,7 +1489,7 @@ loop {
         let new_now = Instant::now();
         let x = new_now.duration_since(assembly_now).as_millis() as f32;
         let y = assembly_station.total_time as f32;
-        draw_rectangle(740.0, 45.0, 200.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
+        draw_rectangle(740.0, 25.0, 200.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
     }
 
     let txb = tx.clone();

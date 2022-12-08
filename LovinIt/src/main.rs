@@ -862,7 +862,6 @@ fn soda(x : f32, y : f32) {
     draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, ORANGE);
 }
 
-//#[macroquad::main("lovin_it")]
 #[macroquad::main(window_conf)]
 async fn main() {
 
@@ -897,15 +896,6 @@ async fn main() {
     let tom_t: Texture2D = load_texture("images/tom.png").await.unwrap();
     let cashier_t: Texture2D = load_texture("images/register.png").await.unwrap();
     
-    
-    // let worker1: Texture2D = load_texture("images/worker1.png").await.unwrap();
-    // let worker2: Texture2D = load_texture("images/worker2.png").await.unwrap();
-    // let worker3: Texture2D = load_texture("images/worker3.png").await.unwrap();
-    // let worker4: Texture2D = load_texture("images/worker4.png").await.unwrap();
-    // let worker5: Texture2D = load_texture("images/worker5.png").await.unwrap();
-
-
-    
     let worker1: Texture2D = load_texture("images/nowak.png").await.unwrap();
     let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
     let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
@@ -939,8 +929,6 @@ loop {
     
     draw_rectangle_lines(10.0, 10.0, 1085.0, 880.0, 20.0, BLACK);
 
-    
-
     for n in (33..1080).step_by(17) {
         let a = n as f32;
         draw_line(a, 20.0, a, 880.0, 3.0, floor_tile);
@@ -950,8 +938,6 @@ loop {
         let a = n as f32;
         draw_line(20.0, a, 1085.0, a, 3.0, floor_tile);
     }
-
-    //far right, x = 1085
     
     //burger
     
@@ -1075,7 +1061,7 @@ loop {
         draw_texture_ex(
             worker1,
             800.0,
-            575.0,
+            600.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -1087,7 +1073,7 @@ loop {
         draw_texture_ex(
             worker2,
             800.0,
-            575.0,
+            600.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -1099,7 +1085,7 @@ loop {
         draw_texture_ex(
             worker3,
             800.0,
-            575.0,
+            600.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -1111,7 +1097,7 @@ loop {
         draw_texture_ex(
             worker4,
             800.0,
-            575.0,
+            600.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -1123,7 +1109,7 @@ loop {
         draw_texture_ex(
             worker5,
             800.0,
-            575.0,
+            600.0,
             WHITE,
             DrawTextureParams {
                 dest_size: None,
@@ -1238,13 +1224,8 @@ loop {
             order.inventory(ui);
             if ui.button(Vec2::new(102., order.inventory.len() as f32 * 52.0 + 10 as f32), "Place Order") {
                 println!("Order Placed!");
-
-                //cache orders according to stations
-                //orders.push(order.clone());
-
                 if order.inventory.len() != 0 {
                     orders.push(order.clone());
-
                     for item in order.clone().inventory { //add to grilling station queue
                         let final_item = item.clone();
                         if final_item.starting_station == "grill" {
@@ -1252,7 +1233,6 @@ loop {
                             break;
                         }
                     }
-
                     for item in order.clone().inventory { //add to frying station queue
                         let final_item = item.clone();
                         if final_item.starting_station == "fry" {
@@ -1260,7 +1240,6 @@ loop {
                             break;
                         }
                     }
-
                     for item in order.clone().inventory { //add to drink station queue
                         let final_item = item.clone();
                         if final_item.starting_station == "drink" {
@@ -1268,10 +1247,8 @@ loop {
                             break;
                         }
                     }
-
                     order.clear();
                     order_number += 1;
-
                 }
             }
         });

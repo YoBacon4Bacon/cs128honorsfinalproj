@@ -871,36 +871,33 @@ fn done_nuggets(x : f32, y : f32) {
 
 //Drinks
 #[allow(dead_code)]
-fn cup(x : f32, y : f32) {
+fn cup(x : f32, y : f32, color: Color, ratio:f32) {
     draw_rectangle(x - 13.0, y - 20.0, 26.0, 43.0, BLACK);
     draw_rectangle(x - 10.0, y - 20.0, 20.0, 40.0, WHITE);
+    draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0 * ratio, color);
     draw_line(x + 4.0, y - 30.0, x + 2.0, y - 20.0, 3.0, RED);
     draw_line(x + 2.0, y - 30.0, x + 15.0, y - 30.0, 2.5, RED);
 }
 
 #[allow(dead_code)]
 fn smoothies(x : f32, y : f32) {
-    cup(x, y);
-    draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, PINK);
+    cup(x, y, PINK, 1.);
 }
 
 #[allow(dead_code)]
 fn tea(x : f32, y : f32) {
     let tea_col = Color::from_rgba(160, 82, 45, 200);
-    cup(x, y);
-    draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, tea_col);
+    cup(x, y, tea_col, 1.);
 }
 
 #[allow(dead_code)]
 fn coffee(x : f32, y : f32) {
-    cup(x, y);
-    draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, DARKBROWN);
+    cup(x, y, DARKBROWN, 1.);
 }
 
 #[allow(dead_code)]
 fn soda(x : f32, y : f32) {
-    cup(x, y);
-    draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, ORANGE);
+    cup(x, y, ORANGE, 1.);
 }
 
 //((Game Loop))
@@ -1061,9 +1058,9 @@ loop {
 
     draw_rectangle(465.0, 790.0, 120.0, 80.0, box_crate);
 
-    cup(490.0, 830.0);
-    cup(520.0, 825.0);
-    cup(550.0, 836.0);
+    cup(490.0, 830.0, WHITE, 1.);
+    cup(520.0, 825.0, WHITE, 1.);
+    cup(550.0, 836.0, WHITE, 1.);
 
     //Cashier
     draw_rectangle(600.0, 630.0, 485.0, 250.0, WHITE);
@@ -1476,7 +1473,7 @@ loop {
         fry_station.total_time = 0;
         let placed_order = fry_orders[0].clone().inventory; //get order
 
-        for item in placed_order { //add to grilling station queue
+        for item in placed_order { //add to frying station queue
             let final_item = item.clone();
             if final_item.starting_station == "fry" {
                 if final_item.str_name == "Small Fry".to_string() || final_item.str_name == "Medium Fry".to_string() || final_item.str_name == "Large Fry".to_string() {
@@ -1532,7 +1529,7 @@ loop {
         drink_station.total_time = 0;
         let placed_order = drink_orders[0].clone().inventory; //get order
 
-        for item in placed_order { //add to grilling station queue
+        for item in placed_order { //add to drink station queue
             let final_item = item.clone();
             if final_item.starting_station == "drink" {
                 if final_item.str_name == "Regular Smoothie".to_string(){
@@ -1620,22 +1617,22 @@ loop {
     }
 
     if !drink_empty {
-        if contains_smoothie {
-            cup(380.,835.);
-        }
-        if contains_coffee {
-            cup(70.,740.);
-        }
-        if contains_soda {
-            cup(220.,835.);
-        }
-        if contains_tea {
-            cup(70.,640.);
-        }
         let new_now = Instant::now();
         let x = new_now.duration_since(drink_now).as_millis() as f32;
         let y = drink_station.total_time as f32;
         draw_rectangle(130.0, 600.0, 200.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
+        if contains_smoothie {
+            cup(380.,835., PINK, (x / y));
+        }
+        if contains_coffee {
+            cup(70.,740., DARKBROWN, (x / y));
+        }
+        if contains_soda {
+            cup(220.,835., ORANGE, (x / y));
+        }
+        if contains_tea {
+            cup(70.,640., Color::from_rgba(160, 82, 45, 200), (x / y));
+        }
     }
 
     if !assembly_empty {

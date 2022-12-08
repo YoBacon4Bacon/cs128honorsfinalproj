@@ -349,6 +349,10 @@ impl AssemblyStation {
                 "Small Fry"=>done_fries(650. + (num_items * 70.), 270.),
                 "Medium Fry"=>done_fries(650. + (num_items * 70.), 270.),
                 "Large Fry"=>done_fries(650. + (num_items * 70.), 270.),
+                "Regular Coffee"=>coffee(650. + (num_items * 70.), 270.),
+                "Regular Tea"=>tea(650. + (num_items * 70.), 270.),
+                "Regular Soda"=>soda(650. + (num_items * 70.), 270.),
+                "Regular Smoothie"=>smoothies(650. + (num_items * 70.), 270.),
                 _=> raw_meat(500., 270.)
             }
             num_items += 1.;
@@ -414,6 +418,9 @@ fn window_conf() -> Conf {
 
 // ((Graphics))
 
+//Functions for burger drawing
+
+//Hamburger bun
 #[allow(dead_code)]
 fn ham_bot(x : f32, y : f32) {
     let burg = Color::from_rgba(244, 164, 96, 250);
@@ -460,6 +467,7 @@ fn ham_bun(x : f32, y : f32) {
     }
 }
 
+//Lettuce
 #[allow(dead_code)]
 async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
     let let_size = Vec2 {x: 50.0, y: 40.0};
@@ -476,6 +484,7 @@ async fn leaf(x : f32, y : f32, lettuce:Texture2D) {
     );
 }
 
+//Tomato
 #[allow(dead_code)]
 async fn tom(x : f32, y : f32, tom:Texture2D) {
     let tom_size = Vec2 {x: 40.0, y: 40.0};
@@ -492,6 +501,7 @@ async fn tom(x : f32, y : f32, tom:Texture2D) {
     );
 }
 
+//Cashier
 #[allow(dead_code)]
 async fn cashier(x : f32, y : f32, cashier:Texture2D) {
     let cash_size = Vec2 {x: 90.0, y: 90.0};
@@ -508,10 +518,10 @@ async fn cashier(x : f32, y : f32, cashier:Texture2D) {
     );
 }
 
+//Meat
 #[allow(dead_code)]
 fn raw_meat(x : f32, y : f32) {
     let meat = Color::from_rgba(240, 128, 128, 225);
-    //let cooked = Color::from_rgba(160, 82, 45, 225);
     draw_circle(x, y, 23.0, meat);
 }
 
@@ -519,14 +529,12 @@ fn raw_meat(x : f32, y : f32) {
 fn cooked_meat(x : f32, y : f32) {
     let cooked = Color::from_rgba(160, 82, 45, 225);
     draw_circle(x + 2.5, y, 23.0, cooked);
-    //draw_circle(504.0, 599.0, 23.0, RED);
 }
 
+//Decorating the assembly station
 #[allow(dead_code)]
 async fn assembly_deco(lettuce_t:Texture2D, tom_t:Texture2D) {
     let grill = Color::from_rgba(220, 220, 220, 255);
-    //draw_rectangle(1020.0, 30.0, 60.0, 60.0, grill);
-    //draw_rectangle(1020.0, 105.0, 60.0, 60.0, grill);
     draw_rectangle(1020.0, 180.0, 60.0, 60.0, grill);
     draw_rectangle(1020.0, 255.0, 60.0, 60.0, grill);
     draw_rectangle(1020.0, 330.0, 60.0, 60.0, grill);
@@ -571,6 +579,7 @@ async fn assembly_deco(lettuce_t:Texture2D, tom_t:Texture2D) {
     draw_circle(1040.0, 200.0, 13.0, mac);
 }
 
+//Sauces
 #[allow(dead_code)]
 fn ketchup(x : f32, y : f32) {
     pub struct Offset {
@@ -630,6 +639,7 @@ fn big_mac_sauce(x : f32, y : f32) {
     }
 }
 
+//Condiments
 #[allow(dead_code)]
 fn pickles(x : f32, y : f32) {
     pub struct Offset {
@@ -678,6 +688,7 @@ fn cheese(x : f32, y : f32) {
     draw_rectangle(x - 18.5, y - 19.0, 40.0, 40.0, chee);
 }
 
+//Actual burger drawings
 #[allow(dead_code)]
 fn hamburger(x : f32, y : f32) {
     ham_bot(x - 1.5, y + 14.0);
@@ -787,6 +798,7 @@ fn double_quarter_pounder_with_cheese(x : f32, y : f32) {
     ham_bun(x - 3.0, y - 7.0);
 }
 
+//Other drawing stuff
 #[allow(dead_code)]
 fn bag(x : f32, y : f32) {
     draw_rectangle(x, y, 60., 90., Color::from_rgba(160, 82, 45, 255));
@@ -843,7 +855,19 @@ fn done_fries(x : f32, y : f32) {
 }
 
 #[allow(dead_code)]
+fn done_nuggets(x : f32, y : f32) {
+    let nug = Color::from_rgba(218, 165, 32, 225);
+    draw_circle(x - 12.0, y - 12.0, 5.5, nug);
+    draw_circle(x, y - 10.5, 5.5, nug);
+    draw_circle(x + 13.0, y - 11.0, 5.5, nug);
+    draw_rectangle(x - 20.0, y - 13.0, 40.0, 25.0, WHITE);
+    draw_text("N", x - 7.0, y + 7.0, 25.0, GOLD);
+}
+
+//Drinks
+#[allow(dead_code)]
 fn cup(x : f32, y : f32) {
+    draw_rectangle(x - 13.0, y - 20.0, 26.0, 43.0, BLACK);
     draw_rectangle(x - 10.0, y - 20.0, 20.0, 40.0, WHITE);
     draw_line(x + 4.0, y - 30.0, x + 2.0, y - 20.0, 3.0, RED);
     draw_line(x + 2.0, y - 30.0, x + 15.0, y - 30.0, 2.5, RED);
@@ -953,16 +977,13 @@ loop {
         draw_line(20.0, a, 1085.0, a, 3.0, floor_tile);
     }
     
-    //burger
-    
+    //Grill Station
     draw_rectangle(20.0, 20.0, 400.0, 300.0, WHITE);
     draw_rectangle(20.0, 20.0, 400.0, 300.0, burger_floor);
-
     draw_text("Grill", 360.0, 40.0, 25.0, BLACK);
 
-    //decorations
+    //Drawing the grill
     draw_rectangle(20.0, 20.0, 105.0, 300.0, counter);
-
     draw_rectangle(20.0, 20.0, 90.0, 193.0, grill);
 
     for n in (32..210).step_by(8) {
@@ -984,15 +1005,16 @@ loop {
     draw_rectangle(28.0, 230.0, 90.0, 50.0, grill);
     raw_meat(68.0, 254.5);
 
-    //fries
+
+
+    //Frying Station
     draw_rectangle(20.0, 300.0, 400.0, 300.0, WHITE);
     draw_rectangle(20.0, 300.0, 400.0, 300.0, fries_floor);
     
     draw_text("Frying", 350.0, 323.0, 25.0, BLACK);
 
-    //decorations
+    //Drawing the decorations
     draw_rectangle(20.0, 300.0, 105.0, 300.0, counter);
-    //draw_rectangle(20.0, 490.0, 400.0, 100.0, counter);
     draw_rectangle(20.0, 305.0, 90.0, 193.0, grill);
     
     draw_rectangle(25.0, 310.0, 80.0, 180.0, oil);
@@ -1002,13 +1024,15 @@ loop {
     draw_rectangle_lines(30.0, 400.0, 70.0, 60.0, 5.0, GRAY); //nuggets fryer
     draw_rectangle_lines(100.0, 425.0, 30.0, 5.0, 5.0, GRAY); //nuggets fryer handle
 
-    //drinks
+
+
+    //Drink Station
     draw_rectangle(20.0, 580.0, 580.0, 300.0, WHITE);
     draw_rectangle(20.0, 580.0, 580.0, 300.0, drink_floor);
     
     draw_text("Drinks", 350.0, 615.0, 25.0, BLACK);
 
-    //decorations
+    //Drawing the machines
     draw_rectangle(20.0, 580.0, 105.0, 300.0, counter);
     draw_rectangle(20.0, 780.0, 600.0, 100.0, counter);
 
@@ -1031,7 +1055,9 @@ loop {
     cup(520.0, 825.0);
     cup(550.0, 836.0);
     
-    //cashier
+
+
+    //Cashier
     draw_rectangle(600.0, 630.0, 485.0, 250.0, WHITE);
     draw_rectangle(600.0, 630.0, 485.0, 250.0, cashier_floor);
     
@@ -1039,13 +1065,13 @@ loop {
 
     //decorations
     draw_rectangle(600.0, 780.0, 485.0, 100.0, counter);
-
     cashier(990.0, 790.0, cashier_t).await;
     
-    //assembly 
+
+
+    //Assembly Station 
     draw_rectangle(610.0, 20.0, 475.0, 510.0, WHITE);
     draw_rectangle(610.0, 20.0, 475.0, 510.0, assembly_floor);
-    
     draw_text("Assembly", 650.0, 40.0, 25.0, BLACK);
 
     //decorations
@@ -1054,13 +1080,13 @@ loop {
     draw_rectangle(1010.0, 20.0, 75.0, 400.0, counter);
     assembly_deco(lettuce_t, tom_t).await;
 
-    //partitions/walls
+    //Partitions/Walls
     draw_line(20.0, 300.0, 420.0, 300.0, 10.0, BLACK);
     draw_line(20.0, 580.0, 420.0, 580.0, 10.0, BLACK);
     draw_line(610.0, 400.0, 1085.0, 400.0, 10.0, BLACK);
     draw_line(600.0, 575.0, 600.0, 880.0, 10.0, BLACK);
 
-    //progress bars
+    //Progress Bars
     draw_rectangle_lines(130.0, 25.0, 200.0, 20.0, 5.0, GRAY); //grill
     draw_rectangle_lines(130.0, 310.0, 200.0, 20.0, 5.0, GRAY);
     draw_rectangle_lines(130.0, 600.0, 200.0, 20.0, 5.0, GRAY);
@@ -1569,6 +1595,7 @@ loop {
     }
 
     if !drink_empty {
+        cup(500.,700.);
         let new_now = Instant::now();
         let x = new_now.duration_since(drink_now).as_millis() as f32;
         let y = drink_station.total_time as f32;

@@ -345,6 +345,10 @@ impl AssemblyStation {
                 "Small Fry"=>done_fries(650. + (num_items * 70.), 270.),
                 "Medium Fry"=>done_fries(650. + (num_items * 70.), 270.),
                 "Large Fry"=>done_fries(650. + (num_items * 70.), 270.),
+                "Regular Coffee"=>coffee(650. + (num_items * 70.), 270.),
+                "Regular Tea"=>tea(650. + (num_items * 70.), 270.),
+                "Regular Soda"=>soda(650. + (num_items * 70.), 270.),
+                "Regular Smoothie"=>smoothies(650. + (num_items * 70.), 270.),
                 _=> raw_meat(500., 270.)
             }
             num_items += 1.;
@@ -1578,6 +1582,7 @@ loop {
     }
 
     if !drink_empty {
+        cup(500.,700.);
         let new_now = Instant::now();
         let x = new_now.duration_since(drink_now).as_millis() as f32;
         let y = drink_station.total_time as f32;

@@ -914,8 +914,8 @@ loop {
     draw_rectangle(20.0, 580.0, 580.0, 300.0, WHITE);
     draw_rectangle(20.0, 580.0, 580.0, 300.0, drink_floor);
     
-    draw_text("Drinks", 525.0, 600.0, 25.0, BLACK);
-    
+    draw_text("Drinks", 350.0, 615.0, 25.0, BLACK);
+
     //decorations
     draw_rectangle(20.0, 580.0, 105.0, 300.0, counter);
     draw_rectangle(20.0, 780.0, 600.0, 100.0, counter);
@@ -950,7 +950,7 @@ loop {
     draw_rectangle(610.0, 20.0, 475.0, 510.0, WHITE);
     draw_rectangle(610.0, 20.0, 475.0, 510.0, assembly_floor);
     
-    draw_text("Assembly", 615.0, 45.0, 25.0, BLACK);
+    draw_text("Assembly", 650.0, 60.0, 25.0, BLACK);
 
     //decorations
     draw_rectangle(610.0, 400.0, 475.0, 65.0, counter);
@@ -967,8 +967,8 @@ loop {
     //progress bars
     draw_rectangle_lines(130.0, 25.0, 200.0, 20.0, 5.0, GRAY);
     draw_rectangle_lines(130.0, 310.0, 200.0, 20.0, 5.0, GRAY);
-    draw_rectangle_lines(465.0, 610.0, 120.0, 20.0, 5.0, GRAY);
-    draw_rectangle_lines(730.0, 30.0, 250.0, 20.0, 5.0, GRAY);
+    draw_rectangle_lines(130.0, 600.0, 200.0, 20.0, 5.0, GRAY);
+    draw_rectangle_lines(740.0, 45.0, 200.0, 20.0, 5.0, GRAY);
 
     //drawing the image
     //texture methods for image manipulation
@@ -1415,7 +1415,7 @@ loop {
         });
     });
 
-    widgets::Window::new(hash!(), vec2(160., 600.), vec2(290., 150.))
+    widgets::Window::new(hash!(), vec2(130., 625.), vec2(290., 150.))
     .label("Drink Station")
     .titlebar(true)
     .ui(&mut *root_ui(), |ui| {
@@ -1452,7 +1452,7 @@ loop {
         let new_now = Instant::now();
         let x = new_now.duration_since(drink_now).as_millis() as f32;
         let y = drink_station.total_time as f32;
-        draw_rectangle(465.0, 610.0, 120.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
+        draw_rectangle(130.0, 600.0, 200.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
     }
 
     if !assembly_empty {
@@ -1460,7 +1460,7 @@ loop {
         let new_now = Instant::now();
         let x = new_now.duration_since(assembly_now).as_millis() as f32;
         let y = assembly_station.total_time as f32;
-        draw_rectangle(730.0, 30.0, 250.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
+        draw_rectangle(740.0, 45.0, 200.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
     }
 
     let txb = tx.clone();

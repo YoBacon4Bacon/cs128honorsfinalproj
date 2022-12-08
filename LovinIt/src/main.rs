@@ -805,6 +805,31 @@ fn nuggets() {
     draw_circle(82.0, 413.0, 5.5, nug);
 }
 
+#[allow(dead_code)]
+fn done_fries(x : f32, y : f32) {
+    pub struct Offset {
+        pub x1 : f32,
+        pub y1 : f32,
+        pub x2 : f32,
+        pub y2 : f32,
+    }
+
+    let fri = Color::from_rgba(255, 165, 0, 225);
+    
+    let vec : Vec<Offset> =  vec![Offset {x1 : -12.0, y1 : -27.0, x2 : -8.0, y2 : -10.0},
+                        Offset {x1 : -5.0, y1 : -25.0, x2 : -5.0, y2 : -10.0},
+                        Offset {x1 : 1.0, y1 : -25.0, x2 : -2.0, y2 : -10.0},
+                        Offset {x1 : 3.0, y1 : -28.0, x2 : 5.0, y2 : -10.0},
+                        Offset {x1 : 9.0, y1 : -25.0, x2 : 5.0, y2 : -10.0}];
+
+    for n in 0..5 {
+        draw_line(vec[n].x1 + x, vec[n].y1 + y, vec[n].x2 + x, vec[n].y2 + y, 3.0, fri);
+    }
+
+    draw_rectangle(x - 13.0, y - 16.0, 23.0, 25.0, RED);
+    draw_text("W", x - 7.0, y + 3.0, 25.0, YELLOW);
+}
+
 //#[macroquad::main("lovin_it")]
 #[macroquad::main(window_conf)]
 async fn main() {

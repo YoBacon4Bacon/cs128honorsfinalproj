@@ -1068,7 +1068,7 @@ loop {
 
     //drawing the image
 
-    if is_key_pressed(Period){
+    if is_key_pressed(KeyCode::Period){
         worker = (worker+1)%5;
     }
     if worker==0 {

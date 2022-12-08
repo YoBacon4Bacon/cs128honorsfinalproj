@@ -965,10 +965,10 @@ loop {
     draw_line(600.0, 575.0, 600.0, 880.0, 10.0, BLACK);
 
     //progress bars
-    draw_rectangle_lines(130.0, 25.0, 200.0, 20.0, 5.0, BLACK);
-    draw_rectangle_lines(130.0, 310.0, 200.0, 20.0, 5.0, BLACK);
-    draw_rectangle_lines(465.0, 610.0, 120.0, 20.0, 5.0, BLACK);
-    draw_rectangle_lines(730.0, 30.0, 250.0, 20.0, 5.0, BLACK);
+    draw_rectangle_lines(130.0, 25.0, 200.0, 20.0, 5.0, GRAY);
+    draw_rectangle_lines(130.0, 310.0, 200.0, 20.0, 5.0, GRAY);
+    draw_rectangle_lines(465.0, 610.0, 120.0, 20.0, 5.0, GRAY);
+    draw_rectangle_lines(730.0, 30.0, 250.0, 20.0, 5.0, GRAY);
 
     //drawing the image
     //texture methods for image manipulation

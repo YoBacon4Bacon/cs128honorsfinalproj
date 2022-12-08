@@ -857,6 +857,8 @@ async fn main() {
     let mut drink_now = Instant::now();
     let mut assembly_now = Instant::now();
 
+    let mut worker = 4;
+
     //adding image into program
     
     let lettuce_t: Texture2D = load_texture("images/lettuce.png").await.unwrap();
@@ -872,10 +874,10 @@ async fn main() {
 
 
     
-    // let worker1: Texture2D = load_texture("images/nowak.png").await.unwrap();
-    // let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
-    // let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
-    // let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
+    let worker1: Texture2D = load_texture("images/nowak.png").await.unwrap();
+    let worker2: Texture2D = load_texture("images/cosman.png").await.unwrap();
+    let worker3: Texture2D = load_texture("images/challen.png").await.unwrap();
+    let worker4: Texture2D = load_texture("images/wade.png").await.unwrap();
     let worker5: Texture2D = load_texture("images/fleck.png").await.unwrap();
     
     
@@ -1029,49 +1031,59 @@ loop {
     draw_rectangle_lines(740.0, 25.0, 200.0, 20.0, 5.0, GRAY); //assembly
 
     //drawing the image
-    //texture methods for image manipulation
-    
-    //https://github.com/not-fl3/macroquad/blob/master/src/texture.rs
-        // draw_texture_ex(
-        //     worker1,
-        //     150.0,
-        //     50.0,
-        //     WHITE,
-        //     DrawTextureParams {
-        //         dest_size: None,
-        //         ..Default::default()
-        //     },
-        // );
-        // draw_texture_ex(
-        //     worker2,
-        //     150.0,
-        //     325.0,
-        //     WHITE,
-        //     DrawTextureParams {
-        //         dest_size: None,
-        //         ..Default::default()
-        //     },
-        // );
-        // draw_texture_ex(
-        //     worker3,
-        //     150.0,
-        //     575.0,
-        //     WHITE,
-        //     DrawTextureParams {
-        //         dest_size: None,
-        //         ..Default::default()
-        //     },
-        // );
-        // draw_texture_ex(
-        //     worker4,
-        //     800.0,
-        //     75.0,
-        //     WHITE,
-        //     DrawTextureParams {
-        //         dest_size: None,
-        //         ..Default::default()
-        //     },
-        // );
+
+    if is_key_pressed(Period){
+        worker = (worker+1)%5;
+    }
+    if worker==0 {
+        draw_texture_ex(
+            worker1,
+            800.0,
+            575.0,
+            WHITE,
+            DrawTextureParams {
+                dest_size: None,
+                ..Default::default()
+            },
+        );
+    }
+    if worker==1 {
+        draw_texture_ex(
+            worker2,
+            800.0,
+            575.0,
+            WHITE,
+            DrawTextureParams {
+                dest_size: None,
+                ..Default::default()
+            },
+        );
+    }
+    if worker==2 {
+        draw_texture_ex(
+            worker3,
+            800.0,
+            575.0,
+            WHITE,
+            DrawTextureParams {
+                dest_size: None,
+                ..Default::default()
+            },
+        );
+    }
+    if worker==3 {
+        draw_texture_ex(
+            worker4,
+            800.0,
+            575.0,
+            WHITE,
+            DrawTextureParams {
+                dest_size: None,
+                ..Default::default()
+            },
+        );
+    }
+    if worker==4 {
         draw_texture_ex(
             worker5,
             800.0,
@@ -1082,6 +1094,8 @@ loop {
                 ..Default::default()
             },
         );
+    }
+        
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {

@@ -795,6 +795,7 @@ async fn main() {
     let mut grill_now = Instant::now();
     let mut fry_now = Instant::now();
     let mut drink_now = Instant::now();
+    let mut assembly_now = Instant::now();
 
     //adding image into program
     
@@ -962,7 +963,12 @@ loop {
     draw_line(20.0, 580.0, 420.0, 580.0, 10.0, BLACK);
     draw_line(610.0, 400.0, 1085.0, 400.0, 10.0, BLACK);
     draw_line(600.0, 575.0, 600.0, 880.0, 10.0, BLACK);
-    
+
+    //progress bars
+    draw_rectangle_lines(130.0, 25.0, 200.0, 20.0, 5.0, BLACK);
+    draw_rectangle_lines(130.0, 310.0, 200.0, 20.0, 5.0, BLACK);
+    draw_rectangle_lines(465.0, 610.0, 120.0, 20.0, 5.0, BLACK);
+    draw_rectangle_lines(730.0, 30.0, 250.0, 20.0, 5.0, BLACK);
 
     //drawing the image
     //texture methods for image manipulation
@@ -1230,23 +1236,28 @@ loop {
         order_ready = true;
         order_ready_num = assembly_orders[0].inventory[0].order_num;
         assembly_orders.drain(0..1);
+        assembly_station.total_time = 0;
     }
     //all orders in assembly queue have been assembled  
     if assembly_orders.len() == 0 && (!received_assembly2.is_none() && received_assembly2.unwrap() == "assembly") {
         assembly_station.queue.clear();
         assembly_empty = true;
+        assembly_station.total_time = 0;
     }
     //there are assembly orders ready to process and no assembly orders running in background
     if assembly_orders.clone().len() > 0 && (assembly_empty || (!received_assembly3.is_none() && received_assembly3.unwrap() == "assembly")) { 
         assembly_station.queue.clear();
         let placed_order = assembly_orders[0].clone().inventory; //get order
         assembly_empty = false;
+        assembly_station.total_time = 0;
 
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
-            assembly_station.queue.push(final_item);
+            assembly_station.queue.push(final_item.clone());
+            assembly_station.total_time += (final_item.assembly_time * final_item.number);
         }
         let mut y = assembly_station.clone();
+        assembly_now = Instant::now();
         let item_cooking = thread::spawn(move || {
             y.assemble();
             if y.queue.clone().len() == (0 as usize) {
@@ -1424,7 +1435,6 @@ loop {
 
     if !grill_empty {
         cooked_meat(68.0, 100.);
-        draw_rectangle_lines(130.0, 25.0, 200.0, 20.0, 5.0, BLACK);
         let new_now = Instant::now();
         let x = new_now.duration_since(grill_now).as_millis() as f32;
         let y = grill_station.total_time as f32;
@@ -1432,7 +1442,6 @@ loop {
     }
 
     if !fry_empty {
-        draw_rectangle_lines(130.0, 310.0, 200.0, 20.0, 5.0, BLACK);
         let new_now = Instant::now();
         let x = new_now.duration_since(fry_now).as_millis() as f32;
         let y = fry_station.total_time as f32;
@@ -1440,7 +1449,6 @@ loop {
     }
 
     if !drink_empty {
-        draw_rectangle_lines(465.0, 610.0, 120.0, 20.0, 5.0, BLACK);
         let new_now = Instant::now();
         let x = new_now.duration_since(drink_now).as_millis() as f32;
         let y = drink_station.total_time as f32;
@@ -1449,6 +1457,10 @@ loop {
 
     if !assembly_empty {
         assembly_station.draw_items();
+        let new_now = Instant::now();
+        let x = new_now.duration_since(assembly_now).as_millis() as f32;
+        let y = assembly_station.total_time as f32;
+        draw_rectangle(730.0, 30.0, 250.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
     }
 
     let txb = tx.clone();

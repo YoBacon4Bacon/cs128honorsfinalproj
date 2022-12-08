@@ -830,6 +830,38 @@ fn done_fries(x : f32, y : f32) {
     draw_text("W", x - 7.0, y + 3.0, 25.0, YELLOW);
 }
 
+#[allow(dead_code)]
+fn cup(x : f32, y : f32) {
+    draw_rectangle(x - 10.0, y - 20.0, 20.0, 40.0, WHITE);
+    draw_line(x + 4.0, y - 30.0, x + 2.0, y - 20.0, 3.0, RED);
+    draw_line(x + 2.0, y - 30.0, x + 15.0, y - 30.0, 2.5, RED);
+}
+
+#[allow(dead_code)]
+fn smoothies(x : f32, y : f32) {
+    cup(x, y);
+    draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, PINK);
+}
+
+#[allow(dead_code)]
+fn tea(x : f32, y : f32) {
+    let tea_col = Color::from_rgba(160, 82, 45, 200);
+    cup(x, y);
+    draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, tea_col);
+}
+
+#[allow(dead_code)]
+fn coffee(x : f32, y : f32) {
+    cup(x, y);
+    draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, DARKBROWN);
+}
+
+#[allow(dead_code)]
+fn soda(x : f32, y : f32) {
+    cup(x, y);
+    draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, ORANGE);
+}
+
 //#[macroquad::main("lovin_it")]
 #[macroquad::main(window_conf)]
 async fn main() {
@@ -897,7 +929,7 @@ async fn main() {
     let fries_floor = Color::from_rgba(175, 238, 238, 30);
     let drink_floor = Color::from_rgba(255, 250, 205, 50);
     let machine = Color::from_rgba(255, 215, 0, 170);
-    let box_crate = Color::from_rgba(160, 82, 45, 255);
+    let box_crate = Color::from_rgba(160, 82, 45, 150);
     let cashier_floor = Color::from_rgba(255, 127, 80, 30);
     let assembly_floor = Color::from_rgba(152, 251, 152, 30);
 
@@ -994,6 +1026,10 @@ loop {
     draw_text("Smoothies", 305.0, 805.0, 20.0, BLACK);
 
     draw_rectangle(465.0, 790.0, 120.0, 80.0, box_crate);
+
+    cup(490.0, 830.0);
+    cup(520.0, 825.0);
+    cup(550.0, 836.0);
     
     //cashier
     draw_rectangle(600.0, 630.0, 485.0, 250.0, WHITE);

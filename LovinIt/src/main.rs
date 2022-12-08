@@ -14,6 +14,8 @@ use macroquad::ui::{
     Drag, Ui,
 };
 
+// ((Storage))
+
 #[derive(Clone)]
 pub enum ItemType{
     Hamburger,
@@ -184,6 +186,8 @@ impl Item {
         }
     }
 }
+
+// ((Thread Stations))
 
 #[derive(Clone)]
 pub struct GrillStation {
@@ -411,6 +415,8 @@ fn window_conf() -> Conf {
         ..Default::default()
     }
 }
+
+// ((Graphics))
 
 //Functions for burger drawing
 
@@ -892,6 +898,8 @@ fn soda(x : f32, y : f32) {
     draw_rectangle(x - 8.0, y - 20.0, 16.0, 37.0, ORANGE);
 }
 
+//((Game Loop))
+
 #[macroquad::main(window_conf)]
 async fn main() {
 
@@ -1153,7 +1161,9 @@ loop {
             },
         );
     }
-        
+    
+    // ((Menu))
+
     widgets::Window::new(hash!(), vec2(1110., 25.), vec2(300., 400.))
         .label("Menu")
         .ui(&mut *root_ui(), |ui| {
@@ -1294,6 +1304,8 @@ loop {
     //pop from orders vector to get next order in line
     //separate into different starting stations
     //run thread
+
+    //((Thread))
 
     let txg = tx.clone(); //grill
     let txf = tx.clone(); //fry
@@ -1579,6 +1591,8 @@ loop {
             assembly_station.display(ui);
         });
     });
+
+    //((Progress Bars))
 
     if !grill_empty {
         cooked_meat(68.0, 100.);

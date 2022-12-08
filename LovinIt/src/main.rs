@@ -906,6 +906,10 @@ async fn main() {
 
     let mut contains_fries = false;
     let mut contains_nuggets = false;
+    let mut contains_smoothie = false;
+    let mut contains_soda = false;
+    let mut contains_coffee = false;
+    let mut contains_tea = false;
 
     let mut order_number: i32 = 1;
     let mut grill_station = GrillStation::new();
@@ -1489,12 +1493,20 @@ loop {
     if (!received_drink3.is_none() && received_drink3.unwrap() == "drink") {
         drink_orders.drain(0..1);
         drink_station.total_time = 0;
+        contains_smoothie = false;
+        contains_coffee = false;
+        contains_tea = false;
+        contains_soda = false;
     }
 
     if drink_orders.len() == 0 && (!received_drink1.is_none() && received_drink1.unwrap() == "drink") {
         drink_station.queue.clear();
         drink_empty = true;
         drink_station.total_time = 0;
+        contains_smoothie = false;
+        contains_coffee = false;
+        contains_tea = false;
+        contains_soda = false;
     }
     
     //there are drink orders ready to process and no drink orders running in background
@@ -1507,6 +1519,15 @@ loop {
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
             if final_item.starting_station == "drink" {
+                if final_item.str_name == "Regular Smoothie".to_string(){
+                    contains_smoothie = true;
+                } else if final_item.str_name == "Regular Coffee".to_string(){
+                    contains_coffee = true;
+                }else if final_item.str_name == "Regular Tea".to_string(){
+                    contains_tea = true;
+                } else {
+                    contains_soda = true;
+                }
                 drink_station.queue.push(final_item.clone());
                 drink_station.total_time += (final_item.cooking_time * final_item.number);
             }
@@ -1581,7 +1602,18 @@ loop {
     }
 
     if !drink_empty {
-        cup(500.,700.);
+        if contains_smoothie {
+            cup(380.,835.);
+        }
+        if contains_coffee {
+            cup(70.,740.);
+        }
+        if contains_soda {
+            cup(220.,835.);
+        }
+        if contains_tea {
+            cup(70.,640.);
+        }
         let new_now = Instant::now();
         let x = new_now.duration_since(drink_now).as_millis() as f32;
         let y = drink_station.total_time as f32;

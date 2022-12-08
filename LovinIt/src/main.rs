@@ -841,7 +841,18 @@ fn done_fries(x : f32, y : f32) {
 }
 
 #[allow(dead_code)]
+fn done_nuggets(x : f32, y : f32) {
+    let nug = Color::from_rgba(218, 165, 32, 225);
+    draw_circle(x - 12.0, y - 12.0, 5.5, nug);
+    draw_circle(x, y - 10.5, 5.5, nug);
+    draw_circle(x + 13.0, y - 11.0, 5.5, nug);
+    draw_rectangle(x - 20.0, y - 13.0, 40.0, 25.0, WHITE);
+    draw_text("N", x - 7.0, y + 7.0, 25.0, GOLD);
+}
+
+#[allow(dead_code)]
 fn cup(x : f32, y : f32) {
+    draw_rectangle(x - 13.0, y - 20.0, 26.0, 43.0, BLACK);
     draw_rectangle(x - 10.0, y - 20.0, 20.0, 40.0, WHITE);
     draw_line(x + 4.0, y - 30.0, x + 2.0, y - 20.0, 3.0, RED);
     draw_line(x + 2.0, y - 30.0, x + 15.0, y - 30.0, 2.5, RED);

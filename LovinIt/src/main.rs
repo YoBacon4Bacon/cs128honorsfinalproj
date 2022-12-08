@@ -326,6 +326,9 @@ impl AssemblyStation {
     fn draw_items(&mut self) {
         let mut num_items: f32 = 0.;
         for item in self.queue.clone() {
+            if num_items == 5. {
+                break;
+            }
             let item_name = item.str_name.as_str();
         
             match item_name{
@@ -339,6 +342,9 @@ impl AssemblyStation {
                 "Quarter Pounder with Cheese"=>quarter_pounder_with_cheese(650. + (num_items * 70.), 270.),
                 "Double Quarter Pounder"=>double_quarter_pounder(650. + (num_items * 70.), 270.),
                 "Double Quarter Pounder with Cheese"=>double_quarter_pounder_with_cheese(650. + (num_items * 70.), 270.),
+                "Small Fry"=>done_fries(650. + (num_items * 70.), 270.),
+                "Medium Fry"=>done_fries(650. + (num_items * 70.), 270.),
+                "Large Fry"=>done_fries(650. + (num_items * 70.), 270.),
                 _=> raw_meat(500., 270.)
             }
             num_items += 1.;

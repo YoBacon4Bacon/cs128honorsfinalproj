@@ -770,7 +770,20 @@ fn fries() {
     draw_line(40.0, 360.0, 55.0, 362.0, 3.0, fr);
     draw_line(57.0, 370.0, 43.0, 380.0, 3.0, fr);
     draw_line(70.0, 380.0, 86.0, 380.0, 3.0, fr);
-    draw_line(90.0, 360.0, 80.0, 375.0, 3.0, BLACK);
+    draw_line(90.0, 360.0, 80.0, 375.0, 3.0, fr);
+}
+
+#[allow(dead_code)]
+fn nuggets() {
+    let nug = Color::from_rgba(218, 165, 32, 225);
+    draw_circle(50.0, 448.0, 5.5, nug);
+    draw_circle(65.0, 435.0, 5.5, nug);
+    draw_circle(43.0, 430.0, 5.5, nug);
+    draw_circle(47.0, 410.0, 5.5, nug);
+    draw_circle(63.0, 416.0, 5.5, nug);
+    draw_circle(84.0, 447.0, 5.5, nug);
+    draw_circle(90.0, 430.0, 5.5, nug);
+    draw_circle(82.0, 413.0, 5.5, nug);
 }
 
 //#[macroquad::main("lovin_it")]
@@ -909,6 +922,7 @@ loop {
     draw_rectangle_lines(100.0, 425.0, 30.0, 5.0, 5.0, GRAY); //nuggets fryer handle
 
     fries();
+    nuggets();
 
     //drinks
     draw_rectangle(20.0, 580.0, 580.0, 300.0, WHITE);

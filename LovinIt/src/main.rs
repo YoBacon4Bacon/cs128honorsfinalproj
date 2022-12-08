@@ -353,6 +353,10 @@ impl AssemblyStation {
                 "Regular Tea"=>tea(650. + (num_items * 70.), 270.),
                 "Regular Soda"=>soda(650. + (num_items * 70.), 270.),
                 "Regular Smoothie"=>smoothies(650. + (num_items * 70.), 270.),
+                "4 McNuggets"=>done_nuggets(650. + (num_items * 70.), 270.),
+                "6 McNuggets"=>done_nuggets(650. + (num_items * 70.), 270.),
+                "10 McNuggets"=>done_nuggets(650. + (num_items * 70.), 270.),
+                "20 McNuggets"=>done_nuggets(650. + (num_items * 70.), 270.),
                 _=> raw_meat(500., 270.)
             }
             num_items += 1.;
@@ -857,6 +861,7 @@ fn done_fries(x : f32, y : f32) {
 #[allow(dead_code)]
 fn done_nuggets(x : f32, y : f32) {
     let nug = Color::from_rgba(218, 165, 32, 225);
+    draw_rectangle(x - 22.0, y - 13.0, 44.0, 27.0, BLACK);
     draw_circle(x - 12.0, y - 12.0, 5.5, nug);
     draw_circle(x, y - 10.5, 5.5, nug);
     draw_circle(x + 13.0, y - 11.0, 5.5, nug);
@@ -1030,6 +1035,7 @@ loop {
 
 
 
+
     //Drink Station
     draw_rectangle(20.0, 580.0, 580.0, 300.0, WHITE);
     draw_rectangle(20.0, 580.0, 580.0, 300.0, drink_floor);
@@ -1058,8 +1064,6 @@ loop {
     cup(490.0, 830.0);
     cup(520.0, 825.0);
     cup(550.0, 836.0);
-    
-
 
     //Cashier
     draw_rectangle(600.0, 630.0, 485.0, 250.0, WHITE);

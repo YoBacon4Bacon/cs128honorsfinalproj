@@ -91,6 +91,9 @@ impl Item {
                 "Quarter Pounder with Cheese"=>1600,
                 "Double Quarter Pounder"=>1700,
                 "Double Quarter Pounder with Cheese"=>1900,
+                "Small Fry"=>800,
+                "Medium Fry"=>900,
+                "Large Fry"=>1000,
                 _=> 500
             },
             assembly_time:match item_type{
@@ -166,11 +169,13 @@ impl Item {
 #[derive(Clone)]
 pub struct GrillStation {
     queue: Vec<Item>,
+    total_time: i32,
 }
 impl GrillStation {
     pub fn new() -> GrillStation {
         GrillStation {
             queue: vec![],
+            total_time: 0,
         }
     }
     pub fn cook(&mut self){
@@ -199,11 +204,13 @@ impl GrillStation {
 #[derive(Clone)]
 pub struct FryStation {
     queue: Vec<Item>,
+    total_time: i32,
 }
 impl FryStation {
     pub fn new() -> FryStation {
         FryStation {
             queue: vec![],
+            total_time: 0,
         }
     }
     pub fn cook(&mut self){
@@ -232,11 +239,13 @@ impl FryStation {
 #[derive(Clone)]
 pub struct DrinkStation {
     queue: Vec<Item>,
+    total_time: i32,
 }
 impl DrinkStation {
     pub fn new() -> DrinkStation {
         DrinkStation {
             queue: vec![],
+            total_time: 0,
         }
     }
     pub fn cook(&mut self){
@@ -265,11 +274,13 @@ impl DrinkStation {
 #[derive(Clone)]
 pub struct AssemblyStation {
     queue: Vec<Item>,
+    total_time: i32,
 }
 impl AssemblyStation {
     pub fn new() -> AssemblyStation {
         AssemblyStation {
             queue: vec![],
+            total_time: 0,
         }
     }
     pub fn assemble(&mut self){
@@ -781,6 +792,10 @@ async fn main() {
     let mut drink_station = DrinkStation::new();
     let mut assembly_station = AssemblyStation::new();
 
+    let mut grill_now = Instant::now();
+    let mut fry_now = Instant::now();
+    let mut drink_now = Instant::now();
+
     //adding image into program
     
     let lettuce_t: Texture2D = load_texture("images/lettuce.png").await.unwrap();
@@ -1124,7 +1139,7 @@ loop {
                         }
                     }
 
-                    for item in order.clone().inventory { //add to grilling station queue
+                    for item in order.clone().inventory { //add to frying station queue
                         let final_item = item.clone();
                         if final_item.starting_station == "fry" {
                             fry_orders.push(order.clone());
@@ -1132,7 +1147,7 @@ loop {
                         }
                     }
 
-                    for item in order.clone().inventory { //add to grilling station queue
+                    for item in order.clone().inventory { //add to drink station queue
                         let final_item = item.clone();
                         if final_item.starting_station == "drink" {
                             drink_orders.push(order.clone());
@@ -1248,16 +1263,19 @@ loop {
     //check if order has been completed
     if (!received_grill3.is_none() && received_grill3.unwrap() == "grill") {
         grill_orders.drain(0..1);
+        grill_station.total_time = 0;
     }
 
     //all grill orders have been processed    
     if grill_orders.len() == 0 && (!received_grill1.is_none() && received_grill1.unwrap() == "grill") {
         grill_station.queue.clear();
         grill_empty = true;
+        grill_station.total_time = 0;
     }
     
     //there are grill orders ready to process and no grill orders running in background
     if grill_orders.clone().len() > 0 && (grill_empty || (!received_grill2.is_none() && received_grill2.unwrap() == "grill")) { 
+        grill_station.total_time = 0;
         grill_station.queue.clear();
         let placed_order = grill_orders[0].clone().inventory; //get order
         grill_empty = false;
@@ -1265,10 +1283,14 @@ loop {
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
             if final_item.starting_station == "grill" {
-                grill_station.queue.push(final_item);
+                grill_station.queue.push(final_item.clone());
+                grill_station.total_time += (final_item.cooking_time * final_item.number);
             }
         }
         let mut y = grill_station.clone();
+
+        grill_now = Instant::now();
+
         let item_cooking = thread::spawn(move || {
             y.cook();
             if y.queue.clone().len() == (0 as usize) {
@@ -1286,27 +1308,32 @@ loop {
     //check if order has been completed
     if (!received_fry3.is_none() && received_fry3.unwrap() == "fry") {
         fry_orders.drain(0..1);
+        fry_station.total_time = 0;
     }
 
     if fry_orders.len() == 0 && (!received_fry1.is_none() && received_fry1.unwrap() == "fry") {
         fry_station.queue.clear();
         fry_empty = true;
+        fry_station.total_time = 0;
     }
     
     //there are fry orders ready to process and no fry orders running in background
     if fry_orders.clone().len() > 0 && (fry_empty || (!received_fry2.is_none() && received_fry2.unwrap() == "fry")) { 
         fry_station.queue.clear();
         fry_empty = false;
+        fry_station.total_time = 0;
         let placed_order = fry_orders[0].clone().inventory; //get order
 
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
             if final_item.starting_station == "fry" {
-                fry_station.queue.push(final_item);
+                fry_station.queue.push(final_item.clone());
+                fry_station.total_time += (final_item.cooking_time * final_item.number);
             }
         }
 
         let mut y = fry_station.clone();
+        fry_now = Instant::now();
         let item_cooking = thread::spawn(move || {
             y.cook();
             if y.queue.clone().len() == (0 as usize) {
@@ -1324,27 +1351,32 @@ loop {
     //check if order has been completed
     if (!received_drink3.is_none() && received_drink3.unwrap() == "drink") {
         drink_orders.drain(0..1);
+        drink_station.total_time = 0;
     }
 
     if drink_orders.len() == 0 && (!received_drink1.is_none() && received_drink1.unwrap() == "drink") {
         drink_station.queue.clear();
         drink_empty = true;
+        drink_station.total_time = 0;
     }
     
     //there are drink orders ready to process and no drink orders running in background
     if drink_orders.clone().len() > 0 && (drink_empty || (!received_drink2.is_none() && received_drink2.unwrap() == "drink")) { 
         drink_station.queue.clear();
         drink_empty = false;
+        drink_station.total_time = 0;
         let placed_order = drink_orders[0].clone().inventory; //get order
 
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
             if final_item.starting_station == "drink" {
-                drink_station.queue.push(final_item);
+                drink_station.queue.push(final_item.clone());
+                drink_station.total_time += (final_item.cooking_time * final_item.number);
             }
         }
 
         let mut y = drink_station.clone();
+        drink_now = Instant::now();
         let item_cooking = thread::spawn(move || {
             y.cook();
             if y.queue.clone().len() == (0 as usize) {
@@ -1392,6 +1424,27 @@ loop {
 
     if !grill_empty {
         cooked_meat(68.0, 100.);
+        draw_rectangle_lines(130.0, 25.0, 200.0, 20.0, 5.0, BLACK);
+        let new_now = Instant::now();
+        let x = new_now.duration_since(grill_now).as_millis() as f32;
+        let y = grill_station.total_time as f32;
+        draw_rectangle(130.0, 25.0, 200.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
+    }
+
+    if !fry_empty {
+        draw_rectangle_lines(130.0, 310.0, 200.0, 20.0, 5.0, BLACK);
+        let new_now = Instant::now();
+        let x = new_now.duration_since(fry_now).as_millis() as f32;
+        let y = fry_station.total_time as f32;
+        draw_rectangle(130.0, 310.0, 200.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
+    }
+
+    if !drink_empty {
+        draw_rectangle_lines(465.0, 610.0, 120.0, 20.0, 5.0, BLACK);
+        let new_now = Instant::now();
+        let x = new_now.duration_since(drink_now).as_millis() as f32;
+        let y = drink_station.total_time as f32;
+        draw_rectangle(465.0, 610.0, 120.0 * (x / y), 20.0, Color::from_rgba(50, 205, 50, 250));
     }
 
     if !assembly_empty {

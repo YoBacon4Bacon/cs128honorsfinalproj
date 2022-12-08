@@ -799,6 +799,9 @@ async fn main() {
     let mut order_ready = false;
     let mut order_ready_num = 1;
 
+    let mut contains_fries = false;
+    let mut contains_nuggets = false;
+
     let mut order_number: i32 = 1;
     let mut grill_station = GrillStation::new();
     let mut fry_station = FryStation::new();
@@ -920,9 +923,6 @@ loop {
     draw_rectangle_lines(100.0, 355.0, 30.0, 5.0, 5.0, GRAY); //fries fryer handle
     draw_rectangle_lines(30.0, 400.0, 70.0, 60.0, 5.0, GRAY); //nuggets fryer
     draw_rectangle_lines(100.0, 425.0, 30.0, 5.0, 5.0, GRAY); //nuggets fryer handle
-
-    fries();
-    nuggets();
 
     //drinks
     draw_rectangle(20.0, 580.0, 580.0, 300.0, WHITE);
@@ -1334,12 +1334,16 @@ loop {
     if (!received_fry3.is_none() && received_fry3.unwrap() == "fry") {
         fry_orders.drain(0..1);
         fry_station.total_time = 0;
+        contains_fries = false;
+        contains_nuggets = false;
     }
 
     if fry_orders.len() == 0 && (!received_fry1.is_none() && received_fry1.unwrap() == "fry") {
         fry_station.queue.clear();
         fry_empty = true;
         fry_station.total_time = 0;
+        contains_fries = false;
+        contains_nuggets = false;
     }
     
     //there are fry orders ready to process and no fry orders running in background
@@ -1352,6 +1356,11 @@ loop {
         for item in placed_order { //add to grilling station queue
             let final_item = item.clone();
             if final_item.starting_station == "fry" {
+                if final_item.str_name == "Small Fry".to_string() || final_item.str_name == "Medium Fry".to_string() || final_item.str_name == "Large Fry".to_string() {
+                    contains_fries = true;
+                } else {
+                    contains_nuggets = true;
+                }
                 fry_station.queue.push(final_item.clone());
                 fry_station.total_time += (final_item.cooking_time * final_item.number);
             }
@@ -1456,6 +1465,12 @@ loop {
     }
 
     if !fry_empty {
+        if contains_fries {
+            fries();
+        }
+        if contains_nuggets {
+            nuggets();
+        }
         let new_now = Instant::now();
         let x = new_now.duration_since(fry_now).as_millis() as f32;
         let y = fry_station.total_time as f32;
